@@ -43,3 +43,4 @@ rootProject.name = "KapitalystiK"
 
 // Spigot
 include("plugin")
+include("shared")

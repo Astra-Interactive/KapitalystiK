@@ -1,7 +1,7 @@
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.kapitalystic.shared.SharedTranslation
 import ru.astrainteractive.kapitalystik.commands.reload
-import ru.astrainteractive.kapitalystik.plugin.Translation
 
 /**
  * Command handler for your plugin
@@ -9,7 +9,7 @@ import ru.astrainteractive.kapitalystik.plugin.Translation
  * @see Reload
  */
 class CommandManager(
-    translationModule: Dependency<Translation>
+    translationModule: Dependency<SharedTranslation>
 ) {
     private val translation by translationModule
 

@@ -4,9 +4,9 @@ import CommandManager
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.kapitalystic.shared.SharedTranslation
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.plugin.Permissions
-import ru.astrainteractive.kapitalystik.plugin.Translation
 
 /**
  * Reload command handler
@@ -18,7 +18,7 @@ import ru.astrainteractive.kapitalystik.plugin.Translation
  * Here you should also check for permission
  */
 fun CommandManager.reload(
-    translationModule: Dependency<Translation>
+    translationModule: Dependency<SharedTranslation>
 ) = KapitalystiK.instance.registerCommand("kptreload") {
     val translation by translationModule
     if (!Permissions.Reload.hasPermission(sender)) {

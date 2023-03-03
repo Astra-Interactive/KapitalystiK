@@ -3,6 +3,7 @@ package ru.astrainteractive.kapitalystik.modules
 import CommandManager
 import ru.astrainteractive.astralibs.di.module
 import ru.astrainteractive.astralibs.di.reloadable
+import ru.astrainteractive.kapitalystic.shared.SharedTranslation
 import ru.astrainteractive.kapitalystik.plugin.Translation
 
 object ServiceLocator {
@@ -10,7 +11,7 @@ object ServiceLocator {
         TODO()
     }
     val TranslationModule = reloadable {
-        Translation()
+        Translation() as SharedTranslation
     }
     val commandManager = module {
         CommandManager(

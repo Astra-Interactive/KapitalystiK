@@ -17,14 +17,6 @@ dependencies {
     // AstraLibs
     implementation(libs.astralibs.ktxCore)
     implementation(libs.astralibs.orm)
-    implementation(libs.astralibs.spigotGui)
-    implementation(libs.astralibs.spigotCore)
-    implementation(libs.bstats.bukkit)
-    // Spigot dependencies
-    compileOnly(libs.essentialsx)
-    compileOnly(libs.paperApi)
-    compileOnly(libs.spigotApi)
-    compileOnly(libs.spigot)
     // Test-Core
     testImplementation(platform(libs.junit.bom))
     testImplementation(kotlin("test-junit5"))
@@ -33,6 +25,4 @@ dependencies {
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.coreJvm)
     testImplementation(libs.xerial.sqlite.jdbc)
-    // Local
-    implementation(project(":shared"))
 }

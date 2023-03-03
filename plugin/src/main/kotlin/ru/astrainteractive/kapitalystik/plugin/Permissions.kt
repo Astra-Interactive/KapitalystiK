@@ -4,6 +4,11 @@ import ru.astrainteractive.astralibs.utils.Permission
 
 sealed class Permissions(override val value: String) : Permission {
     /**
+     * Reload plugin
+     */
+    object Reload : Permissions("kapitalystic.reload")
+
+    /**
      * List avaliable orgs
      */
     object List : Permissions("kapitalystic.orgs.list")
