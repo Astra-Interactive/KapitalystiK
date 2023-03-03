@@ -5,6 +5,7 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
+import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.validators.EconomyConfigurationValidator
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
@@ -57,6 +58,23 @@ class ClanManagementController(
             user = userDTO
         ).onSuccess {
             val message = translation.clanCreated(name = name, tag = tag)
+            economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
+            messageHandler.sendMessage(userDTO, message)
+        }.handleFailure(userDTO)
+    }
+
+    /**
+     * /kpt setspawn
+     */
+    suspend fun setSpawn(userDTO: UserDTO, spawnDTO: OrganizationDTO.SpawnDTO) {
+        val economyPrice = configuration.economy.spawn.set.toDouble()
+        if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
+
+        dbApi.setSpawn(
+            spawnDTO = spawnDTO,
+            userDTO = userDTO
+        ).onSuccess {
+            val message = translation.spawnSet
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
             messageHandler.sendMessage(userDTO, message)
         }.handleFailure(userDTO)
@@ -233,6 +251,4 @@ class ClanManagementController(
             messageHandler.sendMessage(userDTO, message)
         }.handleFailure(userDTO)
     }
-
-
 }

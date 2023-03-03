@@ -14,12 +14,6 @@ interface KapitalystiKDBApi {
     suspend fun create(tag: String, name: String, user: UserDTO): Result<Long>
 
     /**
-     * Set ogranization spawn
-     * @param user - org creator
-     */
-    suspend fun setSpawn(user: UserDTO): Result<*>
-
-    /**
      * Set spawn public access
      * @param isPublic - is spawn public
      * @param user - org creator
@@ -98,8 +92,17 @@ interface KapitalystiKDBApi {
      * Add organization rule to index [index]
      */
     suspend fun setRule(rule: String, index: Int, userDTO: UserDTO): Result<*>
+
     /**
      * Remove rule from [index]
      */
     suspend fun removeRule(rule: String, index: Int, userDTO: UserDTO): Result<*>
+
+    /**
+     * Set organization spawn
+     */
+    suspend fun setSpawn(
+        spawnDTO: OrganizationDTO.SpawnDTO,
+        userDTO: UserDTO
+    ): Result<*>
 }

@@ -29,6 +29,8 @@ interface SharedTranslation {
     val bioChanged: String
 
     val ruleAdded: String
+
+    val spawnSet: String
     fun clanCreated(name: String, tag: String): String
     fun notEnoughMoney(needAmount: Int): String
     fun clanRenamed(newName: String): String
