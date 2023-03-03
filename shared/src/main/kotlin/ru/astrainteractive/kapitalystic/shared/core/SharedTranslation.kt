@@ -9,12 +9,13 @@ interface SharedTranslation {
     val alreadyInvited: String
 
     val notInvited: String
-
+    val notPlayer: String
     val notOrganizationMember: String
 
     val notOrganizationOwner: String
 
     val unexcpectedException: String
+    val wrongUsage: String
 
     val prefix: String
 

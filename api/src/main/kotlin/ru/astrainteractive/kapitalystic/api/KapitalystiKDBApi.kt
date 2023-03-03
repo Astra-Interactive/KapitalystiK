@@ -96,7 +96,7 @@ interface KapitalystiKDBApi {
     /**
      * Remove rule from [index]
      */
-    suspend fun removeRule(rule: String, index: Int, userDTO: UserDTO): Result<*>
+    suspend fun removeRule(index: Int, userDTO: UserDTO): Result<*>
 
     /**
      * Set organization spawn

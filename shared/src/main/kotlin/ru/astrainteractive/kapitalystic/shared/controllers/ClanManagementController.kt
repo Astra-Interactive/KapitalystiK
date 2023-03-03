@@ -235,7 +235,6 @@ class ClanManagementController(
      * /kpt rules remove <index>
      */
     suspend fun removeRule(
-        rule: String,
         index: Int,
         userDTO: UserDTO,
     ) {
@@ -245,7 +244,6 @@ class ClanManagementController(
         dbApi.removeRule(
             userDTO = userDTO,
             index = index,
-            rule = rule
         ).onSuccess {
             val message = translation.ruleAdded
             messageHandler.sendMessage(userDTO, message)

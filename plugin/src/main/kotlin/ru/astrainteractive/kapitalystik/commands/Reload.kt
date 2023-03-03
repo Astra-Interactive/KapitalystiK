@@ -1,6 +1,5 @@
 package ru.astrainteractive.kapitalystik.commands
 
-import CommandManager
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
