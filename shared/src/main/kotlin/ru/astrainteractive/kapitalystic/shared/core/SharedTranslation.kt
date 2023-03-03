@@ -27,6 +27,8 @@ interface SharedTranslation {
     val disbanded: String
 
     val bioChanged: String
+
+    val ruleAdded: String
     fun clanCreated(name: String, tag: String): String
     fun notEnoughMoney(needAmount: Int): String
     fun clanRenamed(newName: String): String

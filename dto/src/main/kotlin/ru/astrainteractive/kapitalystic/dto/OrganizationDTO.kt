@@ -5,5 +5,6 @@ class OrganizationDTO(
     val tag: String,
     val name: String,
     val members: List<MemberDTO>,
-    val leader: MemberDTO
+    val leader: MemberDTO,
+    val rules: List<RuleDTO>
 )

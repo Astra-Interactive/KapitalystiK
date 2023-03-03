@@ -93,4 +93,13 @@ interface KapitalystiKDBApi {
      * Fetch user organization
      */
     suspend fun fetchUserOrganization(userDTO: UserDTO): Result<List<OrganizationDTO>>
+
+    /**
+     * Add organization rule to index [index]
+     */
+    suspend fun setRule(rule: String, index: Int, userDTO: UserDTO): Result<*>
+    /**
+     * Remove rule from [index]
+     */
+    suspend fun removeRule(rule: String, index: Int, userDTO: UserDTO): Result<*>
 }

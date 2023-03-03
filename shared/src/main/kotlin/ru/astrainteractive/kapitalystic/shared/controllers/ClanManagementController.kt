@@ -155,6 +155,7 @@ class ClanManagementController(
             messageHandler.sendMessage(userDTO, message)
         }.handleFailure(userDTO)
     }
+
     /**
      * /kpt transfer <user>
      */
@@ -191,10 +192,47 @@ class ClanManagementController(
         }.handleFailure(userDTO)
     }
 
+    /**
+     * /kpt rules add <index> <rule>
+     */
+    suspend fun setRule(
+        rule: String,
+        index: Int,
+        userDTO: UserDTO,
+    ) {
+        val economyPrice = configuration.economy.rules.add.toDouble()
+        if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
+        dbApi.setRule(
+            userDTO = userDTO,
+            index = index,
+            rule = rule
+        ).onSuccess {
+            val message = translation.ruleAdded
+            messageHandler.sendMessage(userDTO, message)
+        }.handleFailure(userDTO)
+    }
 
+    /**
+     * /kpt rules remove <index>
+     */
+    suspend fun removeRule(
+        rule: String,
+        index: Int,
+        userDTO: UserDTO,
+    ) {
+        val economyPrice = configuration.economy.rules.remove.toDouble()
+        if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
-
+        dbApi.removeRule(
+            userDTO = userDTO,
+            index = index,
+            rule = rule
+        ).onSuccess {
+            val message = translation.ruleAdded
+            messageHandler.sendMessage(userDTO, message)
+        }.handleFailure(userDTO)
+    }
 
 
 }
