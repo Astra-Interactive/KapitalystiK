@@ -33,6 +33,4 @@ dependencies {
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.coreJvm)
     testImplementation(libs.xerial.sqlite.jdbc)
-    // Local
-    implementation(project(":domain"))
 }
