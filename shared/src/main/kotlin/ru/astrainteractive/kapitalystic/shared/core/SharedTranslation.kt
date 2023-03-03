@@ -2,6 +2,9 @@ package ru.astrainteractive.kapitalystic.shared.core
 
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 
+/**
+ * Shared translation interface to use it on both Spigot and other platforms
+ */
 interface SharedTranslation {
 
     // General

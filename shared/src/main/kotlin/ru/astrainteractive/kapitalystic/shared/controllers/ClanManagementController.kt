@@ -13,6 +13,9 @@ import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 import ru.astrainteractive.kapitalystic.shared.utils.FailureHandler
 import ru.astrainteractive.kapitalystic.shared.utils.MessageHandler
 
+/**
+ * Controller for common clan commands
+ */
 class ClanManagementController(
     messageHandler: Dependency<MessageHandler>,
     dbApi: Dependency<KapitalystiKDBApi>,

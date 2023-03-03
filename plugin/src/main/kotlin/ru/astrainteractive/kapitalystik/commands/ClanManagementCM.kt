@@ -21,7 +21,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
 class ClanManagementCM(
     controller: Dependency<ClanManagementController>,
     translation: Dependency<SharedTranslation>,
-    private val plugin: Plugin
+    plugin: Plugin
 ) {
     private val controller by controller
     private val translation by translation

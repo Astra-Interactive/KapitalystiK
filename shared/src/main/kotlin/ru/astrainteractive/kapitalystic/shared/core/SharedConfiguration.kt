@@ -1,5 +1,7 @@
 package ru.astrainteractive.kapitalystic.shared.core
-
+/**
+ * Shared configuration interface to use it on both Spigot and other platforms
+ */
 interface SharedConfiguration {
     val economy: Economy
 

@@ -8,6 +8,9 @@ import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 import ru.astrainteractive.kapitalystic.shared.utils.MessageHandler
 
+/**
+ * This class will help to reduce boilerplate code in some places
+ */
 class EconomyConfigurationValidator(
     configuration: Dependency<SharedConfiguration>,
     economyProvider: Dependency<EconomyProvider>,

@@ -5,6 +5,9 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 
+/**
+ * This class will help to handle [DBException]
+ */
 class FailureHandler(
     translation: Dependency<SharedTranslation>
 ) {

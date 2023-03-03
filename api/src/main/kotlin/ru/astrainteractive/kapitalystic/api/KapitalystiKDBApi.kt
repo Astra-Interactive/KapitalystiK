@@ -3,6 +3,9 @@ package ru.astrainteractive.kapitalystic.api
 import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 
+/**
+ * All [KapitalystiKDBApi] methods may throw [DBException]
+ */
 interface KapitalystiKDBApi {
     /**
      * Create an organization
