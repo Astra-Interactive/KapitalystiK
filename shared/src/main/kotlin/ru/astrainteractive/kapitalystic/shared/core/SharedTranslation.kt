@@ -4,17 +4,7 @@ import ru.astrainteractive.kapitalystic.dto.UserDTO
 
 interface SharedTranslation {
 
-    val alreadyInOrganization: String
-
-    val alreadyInvited: String
-
-    val notInvited: String
-    val notPlayer: String
-    val notOrganizationMember: String
-
-    val notOrganizationOwner: String
-
-    val unexcpectedException: String
+    // General
     val wrongUsage: String
 
     val prefix: String
@@ -32,6 +22,23 @@ interface SharedTranslation {
     val ruleAdded: String
 
     val spawnSet: String
+
+    // DBError
+
+    val alreadyInOrganization: String
+
+    val alreadyInvited: String
+
+    val notInvited: String
+
+    val notPlayer: String
+
+    val notOrganizationMember: String
+
+    val notOrganizationOwner: String
+
+    val unexcpectedException: String
+
     fun clanCreated(name: String, tag: String): String
     fun notEnoughMoney(needAmount: Int): String
     fun clanRenamed(newName: String): String

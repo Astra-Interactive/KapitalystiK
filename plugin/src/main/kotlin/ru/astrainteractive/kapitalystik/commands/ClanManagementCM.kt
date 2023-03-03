@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.permissions.Permissible
 import org.bukkit.plugin.Plugin
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.commands.Argument
@@ -255,7 +254,6 @@ class ClanManagementCM(
             )
         }
     }
-
 
     /**
      * /kpt bio <message>

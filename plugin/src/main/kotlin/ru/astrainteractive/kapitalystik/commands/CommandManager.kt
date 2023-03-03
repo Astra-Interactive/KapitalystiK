@@ -3,7 +3,6 @@ package ru.astrainteractive.kapitalystik.commands
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
-import ru.astrainteractive.kapitalystik.commands.reload
 
 /**
  * Command handler for your plugin
