@@ -35,4 +35,5 @@ dependencies {
     testImplementation(libs.xerial.sqlite.jdbc)
     // Local
     implementation(project(":shared"))
+    implementation(project(":dto"))
 }
