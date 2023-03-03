@@ -4,7 +4,7 @@ import CommandManager
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.kapitalystic.shared.SharedTranslation
+import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.plugin.Permissions
 

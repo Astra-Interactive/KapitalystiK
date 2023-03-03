@@ -1,6 +1,8 @@
-package ru.astrainteractive.kapitalystic.shared
+package ru.astrainteractive.kapitalystic.shared.core
 
 interface SharedConfiguration {
+    val economy: Economy
+
     interface Economy {
         val isEnabled: Boolean
         val create: Int

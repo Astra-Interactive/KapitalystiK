@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.kotlin.serializationKaml)
     // AstraLibs
     implementation(libs.astralibs.ktxCore)
+    implementation(libs.astralibs.spigotCore)
     implementation(libs.astralibs.orm)
     // Test-Core
     testImplementation(platform(libs.junit.bom))
@@ -25,4 +26,7 @@ dependencies {
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.coreJvm)
     testImplementation(libs.xerial.sqlite.jdbc)
+    // Local
+    implementation(project(":api"))
+    implementation(project(":dto"))
 }

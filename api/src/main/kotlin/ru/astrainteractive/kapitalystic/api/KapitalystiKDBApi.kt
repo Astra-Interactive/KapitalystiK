@@ -72,7 +72,7 @@ interface KapitalystiKDBApi {
      * @param bio - bio of organization
      * @param user - owner of organization
      */
-    suspend fun setBio(bio: String,user: UserDTO): Result<*>
+    suspend fun setBio(bio: String, user: UserDTO): Result<*>
 
     /**
      * Fetch list of all organizations
@@ -93,5 +93,4 @@ interface KapitalystiKDBApi {
      * Fetch user organization
      */
     suspend fun fetchUserOrganization(userDTO: UserDTO): Result<List<OrganizationDTO>>
-
 }
