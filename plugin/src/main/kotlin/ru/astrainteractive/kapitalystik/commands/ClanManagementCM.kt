@@ -125,9 +125,9 @@ class ClanManagementCM(
             z = sender.location.z,
         )
         PluginScope.launch(Dispatchers.IO) {
-            controller.setSpawn(
+            controller.setWarp(
                 userDTO = sender.toUserDTO(),
-                spawnDTO = spawnDTO
+                warpDTO = spawnDTO
             )
         }
     }

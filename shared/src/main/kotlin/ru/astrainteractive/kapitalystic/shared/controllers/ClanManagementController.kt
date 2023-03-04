@@ -5,8 +5,8 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
-import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
+import ru.astrainteractive.kapitalystic.dto.WarpDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.validators.EconomyConfigurationValidator
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
@@ -69,12 +69,12 @@ class ClanManagementController(
     /**
      * /kpt setspawn
      */
-    suspend fun setSpawn(userDTO: UserDTO, spawnDTO: OrganizationDTO.SpawnDTO) {
+    suspend fun setWarp(userDTO: UserDTO, warpDTO: WarpDTO) {
         val economyPrice = configuration.economy.spawn.set.toDouble()
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
-        dbApi.setSpawn(
-            spawnDTO = spawnDTO,
+        dbApi.setWarp(
+            warpDTO = warpDTO,
             userDTO = userDTO
         ).onSuccess {
             val message = translation.spawnSet

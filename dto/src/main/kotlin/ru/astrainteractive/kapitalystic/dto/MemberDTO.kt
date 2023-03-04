@@ -4,7 +4,7 @@ import java.util.UUID
 
 class MemberDTO(
     val id: Long,
-    val clanID: Long,
+    val orgID: Long,
     val minecraftName: String,
     val minecraftUUID: UUID
 )

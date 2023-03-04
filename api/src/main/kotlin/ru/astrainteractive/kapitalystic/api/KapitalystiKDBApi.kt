@@ -2,6 +2,7 @@ package ru.astrainteractive.kapitalystic.api
 
 import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
+import ru.astrainteractive.kapitalystic.dto.WarpDTO
 
 /**
  * All [KapitalystiKDBApi] methods may throw [DBException]
@@ -14,7 +15,7 @@ interface KapitalystiKDBApi {
      * @param user - Organization creator
      * @return Organization ID Wrapped with Result
      */
-    suspend fun create(tag: String, name: String, user: UserDTO): Result<Long>
+    suspend fun create(tag: String, name: String, user: UserDTO): Result<OrganizationDTO>
 
     /**
      * Set spawn public access
@@ -104,8 +105,8 @@ interface KapitalystiKDBApi {
     /**
      * Set organization spawn
      */
-    suspend fun setSpawn(
-        spawnDTO: OrganizationDTO.SpawnDTO,
+    suspend fun setWarp(
+        warpDTO: WarpDTO,
         userDTO: UserDTO
     ): Result<*>
 }
