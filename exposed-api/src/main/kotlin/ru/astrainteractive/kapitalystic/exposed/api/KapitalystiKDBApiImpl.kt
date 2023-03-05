@@ -5,6 +5,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKCommonDBApi
@@ -38,6 +39,7 @@ internal class KapitalystiKDBApiImpl(
     private fun OrganizationDTO.toDAO(): OrgDAO {
         return OrgDAO.findById(id) ?: throw DBException.UnexpectedException
     }
+
     private fun MemberDTO.toDAO(): MemberDAO {
         return MemberDAO.findById(id) ?: throw DBException.UnexpectedException
     }
@@ -49,19 +51,23 @@ internal class KapitalystiKDBApiImpl(
     ): Result<OrganizationDTO> = kotlin.runCatching {
         if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
         transaction {
-            OrgDAO.new org@{
-                val orgID = this.id
+
+            val orgDAO = OrgDAO.new org@{
                 this.tag = tag
                 this.name = name
                 this.description = ""
                 this.status = ""
-                this.leader = MemberDAO.new {
-                    this.minecraftUUID = executorDTO.minecraftUUID.toString()
-                    this.minecraftName = executorDTO.minecraftName
-                    this.orgID = orgID
-                }
+                this.ownerUUID = executorDTO.minecraftUUID.toString()
+
             }
-        }.let(orgMapper::toDTO)
+            MemberDAO.new {
+                this.minecraftUUID = executorDTO.minecraftUUID.toString()
+                this.minecraftName = executorDTO.minecraftName
+                this.orgID = orgDAO.id
+            }
+            OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
+        }
+
     }
 
     override suspend fun setStatus(
@@ -167,7 +173,7 @@ internal class KapitalystiKDBApiImpl(
         val ownerDAO = dbCommon.fetchMember(executorDTO)
         val newOwnerDao = dbCommon.fetchMember(userDTO).toDAO()
         val org = dbCommon.fetchOrg(ownerDAO).toDAO()
-        org.leader = newOwnerDao
+        org.owner = newOwnerDao
     }
 
     override suspend fun fetchAllOrganizations(): Result<List<OrganizationDTO>> = kotlin.runCatching {

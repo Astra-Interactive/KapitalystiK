@@ -13,9 +13,10 @@ internal class OrgDAO(id: EntityID<Long>) : LongEntity(id) {
 
     var tag by OrgTable.tag
     var name by OrgTable.name
-    var leader by MemberDAO referencedOn MemberTable.orgID
     var status by OrgTable.status
     var description by OrgTable.description
+    var owner by MemberDAO referencedOn OrgTable.ownerUUID
+    var ownerUUID by OrgTable.ownerUUID
     val members by MemberDAO referrersOn MemberTable.orgID
     val warps by WarpsDAO referrersOn WarpsTable.orgID
 }

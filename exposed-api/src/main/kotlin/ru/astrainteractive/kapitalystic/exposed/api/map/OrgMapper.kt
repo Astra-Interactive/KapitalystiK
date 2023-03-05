@@ -17,9 +17,9 @@ internal class OrgMapperImpl(
             name = entity.name,
             description = entity.description,
             status = entity.status,
-            leader = entity.leader.let(memberMapper::toDTO),
             members = entity.members.map(memberMapper::toDTO),
-            warps = entity.warps.map(warpMapper::toDTO)
+            warps = entity.warps.map(warpMapper::toDTO),
+            leader = entity.owner.let(memberMapper::toDTO)
         )
     }
 }

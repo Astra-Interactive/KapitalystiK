@@ -2,6 +2,7 @@ package ru.astrainteractive.kapitalystic.exposed.api
 
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKCommonDBApi
 import ru.astrainteractive.kapitalystic.dto.MemberDTO
@@ -28,45 +29,45 @@ internal class KapitalystiKCommonDBApiImpl(
         memberMapper = memberMapper,
     ),
 ) : KapitalystiKCommonDBApi {
-    override suspend fun isUserInvited(userDTO: UserDTO, orgID: Long): Boolean {
-        return !InvitationDAO.find(
+    override fun isUserInvited(userDTO: UserDTO, orgID: Long): Boolean = transaction {
+        !InvitationDAO.find(
             InvitationTable.orgID.eq(orgID).and {
                 InvitationTable.minecraftUUID.eq(userDTO.minecraftUUID.toString())
             }
         ).empty()
     }
 
-    override suspend fun isMember(userDTO: UserDTO): Boolean {
+    override fun isMember(userDTO: UserDTO): Boolean = transaction {
         val expression = MemberTable.minecraftUUID.eq(userDTO.minecraftUUID.toString())
-        return !MemberDAO.find(expression).empty()
+        !MemberDAO.find(expression).empty()
     }
 
-    override suspend fun isOwner(userDTO: UserDTO): Boolean {
+    override fun isOwner(userDTO: UserDTO): Boolean = transaction {
         val memberDTO = fetchMember(userDTO)
         val orgDTO = fetchOrg(memberDTO)
-        return orgDTO.leader.id == memberDTO.id
+        orgDTO.leader.id == memberDTO.id
     }
 
-    override suspend fun fetchMember(userDTO: UserDTO): MemberDTO {
+    override fun fetchMember(userDTO: UserDTO): MemberDTO = transaction {
         val expression = MemberTable.minecraftUUID
             .eq(userDTO.minecraftUUID.toString())
         val memberDAO = MemberDAO.find(expression).firstOrNull() ?: throw DBException.NotOrganizationMember
-        return memberDAO.let(memberMapper::toDTO)
+        memberDAO.let(memberMapper::toDTO)
     }
 
-    override suspend fun fetchOrg(userDTO: UserDTO): OrganizationDTO {
+    override fun fetchOrg(userDTO: UserDTO): OrganizationDTO = transaction {
         val memberDTO = fetchMember(userDTO)
-        return fetchOrg(memberDTO)
+        fetchOrg(memberDTO)
     }
 
-    override suspend fun fetchOrg(memberDTO: MemberDTO): OrganizationDTO {
+    override fun fetchOrg(memberDTO: MemberDTO): OrganizationDTO = transaction {
         val orgDAO = OrgDAO.findById(memberDTO.orgID) ?: throw DBException.NotOrganizationMember
-        return orgDAO.let(orgMapper::toDTO)
+        orgDAO.let(orgMapper::toDTO)
     }
 
-    override suspend fun fetchOrg(orgTAG: String): OrganizationDTO {
+    override fun fetchOrg(orgTAG: String): OrganizationDTO = transaction {
         val orgDAO = OrgDAO.find(OrgTable.tag.eq(orgTAG)).firstOrNull()
         orgDAO ?: throw DBException.UnexpectedException
-        return orgDAO.let(orgMapper::toDTO)
+        orgDAO.let(orgMapper::toDTO)
     }
 }
