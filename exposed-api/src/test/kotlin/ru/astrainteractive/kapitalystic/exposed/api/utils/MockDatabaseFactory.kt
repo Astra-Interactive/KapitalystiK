@@ -1,4 +1,4 @@
-package ru.astrainteractive.kapitalystic.exposed.api
+package ru.astrainteractive.kapitalystic.exposed.api.utils
 
 import org.jetbrains.exposed.sql.Database
 import ru.astrainteractive.astralibs.di.Factory

@@ -74,16 +74,22 @@ internal class KapitalystiKDBApiImpl(
         status: String,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        val org = dbCommon.fetchOrg(executorDTO).toDAO()
-        org.status = status
+        if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
+        transaction {
+            val org = dbCommon.fetchOrg(executorDTO).toDAO()
+            org.status = status
+        }
     }
 
     override suspend fun setDescription(
         description: String,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        val org = dbCommon.fetchOrg(executorDTO).toDAO()
-        org.description = description
+        if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
+        transaction {
+            val org = dbCommon.fetchOrg(executorDTO).toDAO()
+            org.description = description
+        }
     }
 
     override suspend fun setWarpPublic(
@@ -123,8 +129,10 @@ internal class KapitalystiKDBApiImpl(
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        val org = dbCommon.fetchOrg(executorDTO).toDAO()
-        org.name = newName
+        transaction{
+            val org = dbCommon.fetchOrg(executorDTO).toDAO()
+            org.name = newName
+        }
     }
 
     override suspend fun invite(
