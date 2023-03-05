@@ -20,6 +20,10 @@ dependencies {
     implementation(libs.astralibs.spigotGui)
     implementation(libs.astralibs.spigotCore)
     implementation(libs.bstats.bukkit)
+    // Exposed
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.core)
     // Spigot dependencies
     compileOnly(libs.essentialsx)
     compileOnly(libs.paperApi)
@@ -36,4 +40,6 @@ dependencies {
     // Local
     implementation(project(":shared"))
     implementation(project(":dto"))
+    implementation(project(":api"))
+    implementation(project(":exposed-api"))
 }

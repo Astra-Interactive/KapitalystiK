@@ -22,14 +22,13 @@ class ClanManagementController(
     economyProvider: Dependency<EconomyProvider>,
     configuration: Dependency<SharedConfiguration>,
     translation: Dependency<SharedTranslation>,
-    extensions: Dependency<FailureHandler>
 ) {
     private val messageHandler by messageHandler
     private val dbApi by dbApi
     private val economyProvider by economyProvider
     private val configuration by configuration
     private val translation by translation
-    private val extension by extensions
+    private val extension = FailureHandler(translation)
     private val economyConfigurationValidator = EconomyConfigurationValidator(
         configuration = configuration,
         economyProvider = economyProvider,

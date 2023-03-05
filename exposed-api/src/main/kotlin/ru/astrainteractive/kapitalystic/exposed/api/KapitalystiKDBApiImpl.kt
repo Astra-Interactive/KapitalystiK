@@ -1,14 +1,15 @@
 package ru.astrainteractive.kapitalystic.exposed.api
 
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.kapitalystic.api.DBException
+import ru.astrainteractive.kapitalystic.api.KapitalystiKCommonDBApi
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
 import ru.astrainteractive.kapitalystic.dto.*
-import ru.astrainteractive.kapitalystic.exposed.api.datasource.DBCommon
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.invitation.InvitationDAO
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.invitation.InvitationTable
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.member.MemberDAO
@@ -25,14 +26,21 @@ import ru.astrainteractive.kapitalystic.exposed.api.map.warp.WarpMapper
 import ru.astrainteractive.kapitalystic.exposed.api.map.warp.WarpMapperImpl
 
 internal class KapitalystiKDBApiImpl(
+    private val dbCommon: KapitalystiKCommonDBApi,
     private val warpMapper: WarpMapper = WarpMapperImpl(),
     private val memberMapper: MemberMapper = MemberMapperImpl,
     private val orgMapper: OrgMapper = OrgMapperImpl(
         warpMapper = warpMapper,
         memberMapper = memberMapper,
-    ),
-    private val dbCommon: DBCommon
+    )
 ) : KapitalystiKDBApi {
+
+    private fun OrganizationDTO.toDAO(): OrgDAO {
+        return OrgDAO.findById(id) ?: throw DBException.UnexpectedException
+    }
+    private fun MemberDTO.toDAO(): MemberDAO {
+        return MemberDAO.findById(id) ?: throw DBException.UnexpectedException
+    }
 
     override suspend fun create(
         tag: String,
@@ -60,7 +68,7 @@ internal class KapitalystiKDBApiImpl(
         status: String,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        val org = dbCommon.fetchOrg(executorDTO)
+        val org = dbCommon.fetchOrg(executorDTO).toDAO()
         org.status = status
     }
 
@@ -68,7 +76,7 @@ internal class KapitalystiKDBApiImpl(
         description: String,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        val org = dbCommon.fetchOrg(executorDTO)
+        val org = dbCommon.fetchOrg(executorDTO).toDAO()
         org.description = description
     }
 
@@ -90,7 +98,7 @@ internal class KapitalystiKDBApiImpl(
     ): Result<*> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         transaction {
-            val org = runBlocking { dbCommon.fetchOrg(executorDTO) }
+            val org = runBlocking { dbCommon.fetchOrg(executorDTO).toDAO() }
             MemberTable.deleteWhere {
                 MemberTable.orgID.eq(org.id)
             }
@@ -109,7 +117,7 @@ internal class KapitalystiKDBApiImpl(
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        val org = dbCommon.fetchOrg(executorDTO)
+        val org = dbCommon.fetchOrg(executorDTO).toDAO()
         org.name = newName
     }
 
@@ -120,11 +128,11 @@ internal class KapitalystiKDBApiImpl(
         if (!dbCommon.isOwner(userDTO)) throw DBException.NotOrganizationOwner
         val member = dbCommon.fetchMember(executorDTO)
         val orgID = member.orgID
-        if (dbCommon.isUserInvited(userDTO, orgID.value)) throw DBException.AlreadyInvited
+        if (dbCommon.isUserInvited(userDTO, orgID)) throw DBException.AlreadyInvited
         InvitationDAO.new {
             this.minecraftName = userDTO.minecraftName
             this.minecraftUUID = userDTO.minecraftUUID.toString()
-            this.orgID = orgID
+            this.orgID = EntityID(orgID, OrgTable)
         }
     }
 
@@ -133,7 +141,7 @@ internal class KapitalystiKDBApiImpl(
         orgTag: String
     ): Result<MemberDTO> = kotlin.runCatching {
         if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
-        val org = dbCommon.fetchOrg(orgTag)
+        val org = dbCommon.fetchOrg(orgTag).toDAO()
         MemberDAO.new {
             this.minecraftName = executorDTO.minecraftName
             this.minecraftUUID = executorDTO.minecraftUUID.toString()
@@ -147,7 +155,7 @@ internal class KapitalystiKDBApiImpl(
     ): Result<*> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         if (dbCommon.isMember(userDTO)) throw DBException.AlreadyInOrganization
-        dbCommon.fetchMember(userDTO).delete()
+        MemberTable.deleteWhere { MemberTable.minecraftUUID.eq(userDTO.minecraftUUID.toString()) }
     }
 
     override suspend fun transferOwnership(
@@ -157,8 +165,8 @@ internal class KapitalystiKDBApiImpl(
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         if (dbCommon.isMember(userDTO)) throw DBException.AlreadyInOrganization
         val ownerDAO = dbCommon.fetchMember(executorDTO)
-        val newOwnerDao = dbCommon.fetchMember(userDTO)
-        val org = dbCommon.fetchOrg(ownerDAO)
+        val newOwnerDao = dbCommon.fetchMember(userDTO).toDAO()
+        val org = dbCommon.fetchOrg(ownerDAO).toDAO()
         org.leader = newOwnerDao
     }
 
@@ -183,7 +191,7 @@ internal class KapitalystiKDBApiImpl(
     override suspend fun fetchUserOrganization(
         executorDTO: UserDTO
     ): Result<OrganizationDTO> = kotlin.runCatching {
-        dbCommon.fetchOrg(executorDTO).let(orgMapper::toDTO)
+        dbCommon.fetchOrg(executorDTO)
     }
 
     override suspend fun setWarp(
@@ -192,7 +200,7 @@ internal class KapitalystiKDBApiImpl(
         tag: String
     ): Result<WarpDTO> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        val member = dbCommon.fetchMember(executorDTO)
+        val member = dbCommon.fetchMember(executorDTO).toDAO()
         WarpsDAO.new {
             this.orgID = member.orgID
             this.tag = tag
