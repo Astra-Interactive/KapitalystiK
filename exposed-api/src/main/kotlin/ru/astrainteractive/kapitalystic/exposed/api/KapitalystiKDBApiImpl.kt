@@ -1,5 +1,7 @@
 package ru.astrainteractive.kapitalystic.exposed.api
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
@@ -10,6 +12,9 @@ import ru.astrainteractive.kapitalystic.exposed.api.datasource.DBDataSource
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.invitation.InvitationDAO
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.member.MemberDAO
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.org.OrgDAO
+import ru.astrainteractive.kapitalystic.exposed.api.enitites.warps.WarpType
+import ru.astrainteractive.kapitalystic.exposed.api.enitites.warps.WarpsDAO
+import ru.astrainteractive.kapitalystic.exposed.api.enitites.warps.WarpsTable
 import ru.astrainteractive.kapitalystic.exposed.api.map.MemberMapper
 import ru.astrainteractive.kapitalystic.exposed.api.map.MemberMapperImpl
 import ru.astrainteractive.kapitalystic.exposed.api.map.OrgMapper
@@ -59,9 +64,17 @@ internal class KapitalystiKDBApiImpl(
         }.let(orgMapper::toDTO)
     }
 
-    override suspend fun setSpawnPublic(isPublic: Boolean, user: UserDTO): Result<*> {
+    override suspend fun setWarpPublic(
+        isPublic: Boolean,
+        warpTAG: String,
+        user: UserDTO
+    ): Result<*> = kotlin.runCatching {
         if (!dbDataSource.isOwner(user)) throw DBException.NotOrganizationOwner
-        TODO("Not yet implemented")
+        val member = dbDataSource.fetchMember(user)
+        val warp = WarpsTable.tag.eq(warpTAG).and(WarpsTable.orgID.eq(member.orgID)).let {
+            WarpsDAO.find(it)
+        }.firstOrNull() ?: throw DBException.UnexpectedException
+        warp.isPrivate = !isPublic
     }
 
     override suspend fun disband(user: UserDTO): Result<*> {

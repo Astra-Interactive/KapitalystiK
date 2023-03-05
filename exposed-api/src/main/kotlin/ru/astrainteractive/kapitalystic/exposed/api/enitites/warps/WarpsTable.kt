@@ -5,6 +5,7 @@ import ru.astrainteractive.kapitalystic.exposed.api.enitites.org.OrgTable
 
 internal object WarpsTable : LongIdTable() {
     val orgID = reference("org_id", OrgTable)
+    val tag = varchar("tag",16).uniqueIndex()
     val x = double("x")
     val y = double("y")
     val z = double("z")

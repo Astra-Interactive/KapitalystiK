@@ -20,9 +20,10 @@ interface KapitalystiKDBApi {
     /**
      * Set spawn public access
      * @param isPublic - is spawn public
+     * @param warpTAG - tag of selected warp
      * @param user - org creator
      */
-    suspend fun setSpawnPublic(isPublic: Boolean, user: UserDTO): Result<*>
+    suspend fun setWarpPublic(isPublic: Boolean, warpTAG: String, user: UserDTO): Result<*>
 
     /**
      * Disband clan
@@ -103,7 +104,7 @@ interface KapitalystiKDBApi {
     suspend fun removeRule(index: Int, userDTO: UserDTO): Result<*>
 
     /**
-     * Set organization spawn
+     * Set organization warp
      */
     suspend fun setWarp(
         warpDTO: WarpDTO,

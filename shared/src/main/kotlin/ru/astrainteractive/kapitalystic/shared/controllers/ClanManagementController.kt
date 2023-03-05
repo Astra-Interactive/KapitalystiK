@@ -87,7 +87,7 @@ class ClanManagementController(
      * /kpt spawnpublic <bool>
      */
     suspend fun makeSpawnPublic(userDTO: UserDTO, isPublic: Boolean) {
-        dbApi.setSpawnPublic(
+        dbApi.setWarpPublic(
             isPublic = isPublic,
             user = userDTO
         ).onSuccess {

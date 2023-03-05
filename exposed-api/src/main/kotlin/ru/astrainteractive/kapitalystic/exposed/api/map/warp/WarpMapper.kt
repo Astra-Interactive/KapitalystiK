@@ -16,7 +16,8 @@ internal class WarpMapperImpl(
             world = entity.worldName,
             type = entity.type.let(warpTypeMapper::toDTO),
             orgID = entity.orgID.value,
-            isPrivate = entity.isPrivate
+            isPrivate = entity.isPrivate,
+            tag = entity.tag
         )
     }
 }

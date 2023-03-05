@@ -4,6 +4,7 @@ class WarpDTO(
     val x: Double,
     val y: Double,
     val z: Double,
+    val tag: String,
     val type: WarpTypeDTO,
     val world: String,
     val orgID: Long,
