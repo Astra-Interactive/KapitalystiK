@@ -36,12 +36,12 @@ internal class KapitalystiKDBApiImpl(
     )
 ) : KapitalystiKDBApi {
 
-    private fun OrganizationDTO.toDAO(): OrgDAO {
-        return OrgDAO.findById(id) ?: throw DBException.UnexpectedException
+    private fun OrganizationDTO.toDAO(): OrgDAO = transaction {
+        OrgDAO.findById(this@toDAO.id) ?: throw DBException.UnexpectedException
     }
 
-    private fun MemberDTO.toDAO(): MemberDAO {
-        return MemberDAO.findById(id) ?: throw DBException.UnexpectedException
+    private fun MemberDTO.toDAO(): MemberDAO = transaction {
+        MemberDAO.findById(this@toDAO.id) ?: throw DBException.UnexpectedException
     }
 
     override suspend fun create(
@@ -129,7 +129,7 @@ internal class KapitalystiKDBApiImpl(
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        transaction{
+        transaction {
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.name = newName
         }
@@ -139,14 +139,16 @@ internal class KapitalystiKDBApiImpl(
         userDTO: UserDTO,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        if (!dbCommon.isOwner(userDTO)) throw DBException.NotOrganizationOwner
-        val member = dbCommon.fetchMember(executorDTO)
-        val orgID = member.orgID
-        if (dbCommon.isUserInvited(userDTO, orgID)) throw DBException.AlreadyInvited
-        InvitationDAO.new {
-            this.minecraftName = userDTO.minecraftName
-            this.minecraftUUID = userDTO.minecraftUUID.toString()
-            this.orgID = EntityID(orgID, OrgTable)
+        transaction {
+            if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
+            val member = dbCommon.fetchMember(executorDTO)
+            val orgID = member.orgID
+            if (dbCommon.isUserInvited(userDTO, orgID)) throw DBException.AlreadyInvited
+            InvitationDAO.new {
+                this.minecraftName = userDTO.minecraftName
+                this.minecraftUUID = userDTO.minecraftUUID.toString()
+                this.orgID = EntityID(orgID, OrgTable)
+            }
         }
     }
 
@@ -154,34 +156,41 @@ internal class KapitalystiKDBApiImpl(
         executorDTO: UserDTO,
         orgTag: String
     ): Result<MemberDTO> = kotlin.runCatching {
-        if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
-        val org = dbCommon.fetchOrg(orgTag).toDAO()
-        MemberDAO.new {
-            this.minecraftName = executorDTO.minecraftName
-            this.minecraftUUID = executorDTO.minecraftUUID.toString()
-            this.orgID = org.id
-        }.let(memberMapper::toDTO)
+        transaction {
+            if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
+            val org = dbCommon.fetchOrg(orgTag).toDAO()
+            MemberDAO.new {
+                this.minecraftName = executorDTO.minecraftName
+                this.minecraftUUID = executorDTO.minecraftUUID.toString()
+                this.orgID = org.id
+            }.let(memberMapper::toDTO)
+        }
     }
 
     override suspend fun kickMember(
         userDTO: UserDTO,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        if (dbCommon.isMember(userDTO)) throw DBException.AlreadyInOrganization
-        MemberTable.deleteWhere { MemberTable.minecraftUUID.eq(userDTO.minecraftUUID.toString()) }
+        transaction {
+            if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
+            if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
+            dbCommon.fetchMember(userDTO).toDAO().delete()
+        }
     }
 
     override suspend fun transferOwnership(
         userDTO: UserDTO,
         executorDTO: UserDTO
     ): Result<*> = kotlin.runCatching {
-        if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
-        if (dbCommon.isMember(userDTO)) throw DBException.AlreadyInOrganization
-        val ownerDAO = dbCommon.fetchMember(executorDTO)
-        val newOwnerDao = dbCommon.fetchMember(userDTO).toDAO()
-        val org = dbCommon.fetchOrg(ownerDAO).toDAO()
-        org.owner = newOwnerDao
+        transaction {
+            if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
+            if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
+            val ownerDAO = dbCommon.fetchMember(executorDTO)
+            val newOwnerDao = dbCommon.fetchMember(userDTO).toDAO()
+            val org = dbCommon.fetchOrg(ownerDAO).toDAO()
+            org.ownerUUID = newOwnerDao.minecraftUUID
+            org.owner = newOwnerDao
+        }
     }
 
     override suspend fun fetchAllOrganizations(): Result<List<OrganizationDTO>> = kotlin.runCatching {
@@ -198,8 +207,10 @@ internal class KapitalystiKDBApiImpl(
     override suspend fun fetchOrganization(
         tag: String
     ): Result<OrganizationDTO> = kotlin.runCatching {
-        val org = OrgDAO.find(OrgTable.tag.eq(tag)).firstOrNull()
-        org?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
+        transaction {
+            val org = OrgDAO.find(OrgTable.tag.eq(tag)).firstOrNull()
+            org?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
+        }
     }
 
     override suspend fun fetchUserOrganization(
