@@ -13,6 +13,5 @@ internal class WarpsDAO(id: EntityID<Long>) : LongEntity(id) {
     var y by WarpsTable.y
     var z by WarpsTable.z
     var worldName by WarpsTable.worldName
-    var type by WarpsTable.type
     var isPrivate by WarpsTable.isPrivate
 }

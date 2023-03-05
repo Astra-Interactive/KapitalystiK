@@ -5,8 +5,8 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
+import ru.astrainteractive.kapitalystic.dto.LocationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
-import ru.astrainteractive.kapitalystic.dto.WarpDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.validators.EconomyConfigurationValidator
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
@@ -58,7 +58,7 @@ class ClanManagementController(
         dbApi.create(
             tag = tag,
             name = name,
-            user = userDTO
+            executorDTO = userDTO
         ).onSuccess {
             val message = translation.clanCreated(name = name, tag = tag)
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
@@ -69,13 +69,18 @@ class ClanManagementController(
     /**
      * /kpt setspawn
      */
-    suspend fun setWarp(userDTO: UserDTO, warpDTO: WarpDTO) {
+    suspend fun setWarp(
+        userDTO: UserDTO,
+        locationDTO: LocationDTO,
+        tag: String
+    ) {
         val economyPrice = configuration.economy.spawn.set.toDouble()
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
         dbApi.setWarp(
-            warpDTO = warpDTO,
-            userDTO = userDTO
+            locationDTO = locationDTO,
+            executorDTO = userDTO,
+            tag = tag
         ).onSuccess {
             val message = translation.spawnSet
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
@@ -86,10 +91,15 @@ class ClanManagementController(
     /**
      * /kpt spawnpublic <bool>
      */
-    suspend fun makeSpawnPublic(userDTO: UserDTO, isPublic: Boolean) {
+    suspend fun makeWarpPublic(
+        userDTO: UserDTO,
+        warpTAG: String,
+        isPublic: Boolean
+    ) {
         dbApi.setWarpPublic(
             isPublic = isPublic,
-            user = userDTO
+            warpTAG = warpTAG,
+            executorDTO = userDTO
         ).onSuccess {
             val message = translation.spawnPublic(isPublic)
             messageHandler.sendMessage(userDTO, message)
@@ -101,7 +111,7 @@ class ClanManagementController(
      */
     suspend fun disband(userDTO: UserDTO) {
         dbApi.disband(
-            user = userDTO
+            executorDTO = userDTO
         ).onSuccess {
             val message = translation.disbanded
             messageHandler.sendMessage(userDTO, message)
@@ -117,7 +127,7 @@ class ClanManagementController(
 
         dbApi.rename(
             newName = newName,
-            user = userDTO
+            executorDTO = userDTO
         ).onSuccess {
             val message = translation.clanRenamed(newName)
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
@@ -136,8 +146,8 @@ class ClanManagementController(
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
         dbApi.invite(
-            user = userDTO,
-            initiator = initiatorDTO
+            userDTO = userDTO,
+            executorDTO = initiatorDTO
         ).onSuccess {
             val message = translation.userInvited(userDTO)
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
@@ -153,8 +163,8 @@ class ClanManagementController(
         clanTAG: String,
     ) {
         dbApi.acceptInvitation(
-            user = userDTO,
-            clanTAG = clanTAG
+            executorDTO = userDTO,
+            orgTag = clanTAG
         ).onSuccess {
             val message = translation.joinedToClan(clanTAG)
             messageHandler.sendMessage(userDTO, message)
@@ -169,8 +179,8 @@ class ClanManagementController(
         initiatorDTO: UserDTO,
     ) {
         dbApi.kickMember(
-            user = userDTO,
-            initiator = initiatorDTO
+            userDTO = userDTO,
+            executorDTO = initiatorDTO
         ).onSuccess {
             val message = translation.userKicked(userDTO)
             messageHandler.sendMessage(userDTO, message)
@@ -185,8 +195,8 @@ class ClanManagementController(
         initiatorDTO: UserDTO,
     ) {
         dbApi.transferOwnership(
-            user = userDTO,
-            initiator = initiatorDTO
+            userDTO = userDTO,
+            executorDTO = initiatorDTO
         ).onSuccess {
             val message = translation.ownershipTransferred(userDTO)
             messageHandler.sendMessage(userDTO, message)
@@ -196,16 +206,16 @@ class ClanManagementController(
     /**
      * /kpt bio <message>
      */
-    suspend fun setBio(
+    suspend fun setStatus(
         userDTO: UserDTO,
-        bio: String,
+        status: String,
     ) {
         val economyPrice = configuration.economy.bio.toDouble()
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
-        dbApi.setBio(
-            user = userDTO,
-            bio = bio
+        dbApi.setStatus(
+            executorDTO = userDTO,
+            status = status
         ).onSuccess {
             val message = translation.bioChanged
             economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
@@ -216,37 +226,16 @@ class ClanManagementController(
     /**
      * /kpt rules add <index> <rule>
      */
-    suspend fun setRule(
-        rule: String,
-        index: Int,
+    suspend fun setDescription(
+        description: String,
         userDTO: UserDTO,
     ) {
         val economyPrice = configuration.economy.rules.add.toDouble()
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
-        dbApi.setRule(
-            userDTO = userDTO,
-            index = index,
-            rule = rule
-        ).onSuccess {
-            val message = translation.ruleAdded
-            messageHandler.sendMessage(userDTO, message)
-        }.handleFailure(userDTO)
-    }
-
-    /**
-     * /kpt rules remove <index>
-     */
-    suspend fun removeRule(
-        index: Int,
-        userDTO: UserDTO,
-    ) {
-        val economyPrice = configuration.economy.rules.remove.toDouble()
-        if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
-
-        dbApi.removeRule(
-            userDTO = userDTO,
-            index = index,
+        dbApi.setDescription(
+            executorDTO = userDTO,
+            description = description
         ).onSuccess {
             val message = translation.ruleAdded
             messageHandler.sendMessage(userDTO, message)

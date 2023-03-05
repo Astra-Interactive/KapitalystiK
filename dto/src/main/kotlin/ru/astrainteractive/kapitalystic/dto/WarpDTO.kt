@@ -1,16 +1,8 @@
 package ru.astrainteractive.kapitalystic.dto
 
 class WarpDTO(
-    val x: Double,
-    val y: Double,
-    val z: Double,
+    val locationDTO: LocationDTO,
     val tag: String,
-    val type: WarpTypeDTO,
-    val world: String,
     val orgID: Long,
     val isPrivate: Boolean
-) {
-    enum class WarpTypeDTO {
-        SPAWN, CUSTOM
-    }
-}
+)

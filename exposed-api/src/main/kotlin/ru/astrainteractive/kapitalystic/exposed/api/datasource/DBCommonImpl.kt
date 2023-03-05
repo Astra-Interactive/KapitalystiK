@@ -11,7 +11,7 @@ import ru.astrainteractive.kapitalystic.exposed.api.enitites.member.MemberTable
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.org.OrgDAO
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.org.OrgTable
 
-internal class DBDataSourceImpl : DBDataSource {
+internal class DBCommonImpl : DBCommon {
     override suspend fun isMember(userDTO: UserDTO): Boolean {
         val expression = MemberTable.minecraftUUID.eq(userDTO.minecraftUUID.toString())
         return !MemberDAO.find(expression).empty()
@@ -45,5 +45,18 @@ internal class DBDataSourceImpl : DBDataSource {
                 MemberDAO.find(expression).firstOrNull()
             } ?: throw DBException.NotOrganizationMember
         return member
+    }
+
+    override suspend fun fetchOrg(userDTO: UserDTO): OrgDAO {
+        val member = fetchMember(userDTO)
+        return fetchOrg(member)
+    }
+
+    override suspend fun fetchOrg(memberDAO: MemberDAO): OrgDAO {
+        return OrgDAO.findById(memberDAO.orgID) ?: throw DBException.NotOrganizationMember
+    }
+
+    override suspend fun fetchOrg(orgTAG: String): OrgDAO {
+        return OrgDAO.find(OrgTable.tag.eq(orgTAG)).firstOrNull() ?: throw DBException.UnexpectedException
     }
 }

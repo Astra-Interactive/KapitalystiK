@@ -12,7 +12,7 @@ import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
+import ru.astrainteractive.kapitalystic.dto.LocationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.ClanManagementController
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
@@ -66,29 +66,19 @@ class ClanManagementCM(
     private val kpt = plugin.registerCommand("kpt") {
         when (args.getOrNull(0)) {
             "create" -> createOrganization()
-            "setspawn" -> setSpawn()
+            "setwarp" -> setWarp()
             "spawn" -> TODO()
-            "spawnpublic" -> setSpawnPublicity()
+            "publicwarp" -> editWarp()
             "disband" -> disband()
             "rename" -> rename()
             "invite" -> invite()
             "accept" -> accept()
             "kick" -> kick()
             "transfer" -> transfer()
-            "bio" -> setBio()
-            "rules" -> rules()
+            "bio" -> setDescription()
+            "description" -> setDescription()
             "list" -> TODO()
             "org" -> TODO()
-        }
-    }
-
-    /**
-     * /kpt rules
-     */
-    private fun Command.rules() {
-        when (args.getOrNull(1)) {
-            "add" -> addRule()
-            "remove" -> removeRule()
         }
     }
 
@@ -113,39 +103,44 @@ class ClanManagementCM(
     }
 
     /**
-     * /kpt setspawn
+     * /kpt setwarp <tag>
      */
-    private fun Command.setSpawn() {
+    private fun Command.setWarp() {
         if (!sender.validatePermission(Permissions.Spawn.Set)) return
-
+        val tag = argument(1) { it }.validateUsage(sender) ?: return
         val sender = sender.validatePlayer() ?: return
-        val spawnDTO = OrganizationDTO.SpawnDTO(
+        val locationDTO = LocationDTO(
             x = sender.location.x,
             y = sender.location.y,
             z = sender.location.z,
+            world = sender.world.name,
         )
+
         PluginScope.launch(Dispatchers.IO) {
             controller.setWarp(
                 userDTO = sender.toUserDTO(),
-                warpDTO = spawnDTO
+                locationDTO = locationDTO,
+                tag = tag
             )
         }
     }
 
     /**
-     * /kpt spawnpublic <bool>
+     * /kpt publicwarp <tag> <public:bool>
      */
-    private fun Command.setSpawnPublicity() {
+    private fun Command.editWarp() {
         if (!sender.validatePermission(Permissions.Spawn.Visibility)) return
+        val tag = argument(1) { it }.validateUsage(sender) ?: return
 
-        val isPublic = argument(1) { it == "true" }.validateUsage(sender) ?: return
+        val isPublic = argument(2) { it == "true" }.validateUsage(sender) ?: return
 
         val sender = sender.validatePlayer() ?: return
 
         PluginScope.launch(Dispatchers.IO) {
-            controller.makeSpawnPublic(
+            controller.makeWarpPublic(
                 userDTO = sender.toUserDTO(),
                 isPublic = isPublic,
+                warpTAG = tag
             )
         }
     }
@@ -266,46 +261,27 @@ class ClanManagementCM(
         val sender = sender.validatePlayer() ?: return
 
         PluginScope.launch(Dispatchers.IO) {
-            controller.setBio(
+            controller.setStatus(
                 userDTO = sender.toUserDTO(),
-                bio = bio,
+                status = bio,
             )
         }
     }
 
     /**
-     * /kpt rules add <index> <rule>
+     * /kpt description <message>
      */
-    private fun Command.addRule() {
-        if (!sender.validatePermission(Permissions.Management.Rules.Add)) return
+    private fun Command.setDescription() {
+        if (!sender.validatePermission(Permissions.Management.Bio)) return
 
-        val index = argument(2) { it?.toIntOrNull() }.validateUsage(sender) ?: return
-        val rule = argument(3) { it }.validateUsage(sender) ?: return
+        val description = argument(1) { it }.validateUsage(sender) ?: return
 
         val sender = sender.validatePlayer() ?: return
 
         PluginScope.launch(Dispatchers.IO) {
-            controller.setRule(
+            controller.setDescription(
                 userDTO = sender.toUserDTO(),
-                rule = rule,
-                index = index
-            )
-        }
-    }
-
-    /**
-     * /kpt rules remove <index>
-     */
-    private fun Command.removeRule() {
-        if (!sender.validatePermission(Permissions.Management.Rules.Remove)) return
-
-        val index = argument(2) { it?.toIntOrNull() }.validateUsage(sender) ?: return
-        val sender = sender.validatePlayer() ?: return
-
-        PluginScope.launch(Dispatchers.IO) {
-            controller.removeRule(
-                userDTO = sender.toUserDTO(),
-                index = index
+                description = description,
             )
         }
     }
