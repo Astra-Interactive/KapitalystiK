@@ -77,20 +77,20 @@ sealed class Permissions(override val value: String) : Permission {
         }
     }
 
-    sealed class Spawn(value: String) : Permissions(value) {
+    sealed class Warp(value: String) : Permissions(value) {
         /**
          * Set org spawn
          */
-        object Set : Spawn("kapitalystic.spawn.set")
+        object Set : Warp("kapitalystic.warp.set")
 
         /**
          * Teleport to org spawn
          */
-        object Teleport : Spawn("kapitalystic.spawn.tp")
+        object Teleport : Warp("kapitalystic.warp.tp")
 
         /**
          * Set org spawn visibility
          */
-        object Visibility : Spawn("kapitalystic.spawn.visibility")
+        object Visibility : Warp("kapitalystic.warp.visibility")
     }
 }

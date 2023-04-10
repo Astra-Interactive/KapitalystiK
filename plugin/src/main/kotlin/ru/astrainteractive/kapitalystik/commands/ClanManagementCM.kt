@@ -106,7 +106,7 @@ class ClanManagementCM(
      * /kpt setwarp <tag>
      */
     private fun Command.setWarp() {
-        if (!sender.validatePermission(Permissions.Spawn.Set)) return
+        if (!sender.validatePermission(Permissions.Warp.Set)) return
         val tag = argument(1) { it }.validateUsage(sender) ?: return
         val sender = sender.validatePlayer() ?: return
         val locationDTO = LocationDTO(
@@ -129,7 +129,7 @@ class ClanManagementCM(
      * /kpt publicwarp <tag> <public:bool>
      */
     private fun Command.editWarp() {
-        if (!sender.validatePermission(Permissions.Spawn.Visibility)) return
+        if (!sender.validatePermission(Permissions.Warp.Visibility)) return
         val tag = argument(1) { it }.validateUsage(sender) ?: return
 
         val isPublic = argument(2) { it == "true" }.validateUsage(sender) ?: return

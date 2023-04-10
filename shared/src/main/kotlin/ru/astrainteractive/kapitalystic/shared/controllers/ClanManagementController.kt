@@ -88,7 +88,7 @@ class ClanManagementController(
     }
 
     /**
-     * /kpt spawnpublic <bool>
+     * /kpt publicwarp <tag> <public:bool>
      */
     suspend fun makeWarpPublic(
         userDTO: UserDTO,
