@@ -1,0 +1,24 @@
+## Core configuration of KapitalystiK
+```yaml
+general:
+  economy:
+    # Is Economy enabled
+    enabled: true
+    # Organization creation costs
+    create: 5000
+    # Organization rename costs
+    rename: 5000
+    # Invite player to organization costs
+    invite: 100
+    # Set organization bio costs
+    bio: 100
+    # Setspawn cost
+    spawn:
+      set: 100
+      visibility: 200
+    # Add or remove rule costs
+    rules:
+      add: 100
+      remove: 100
+
+```
