@@ -11,7 +11,8 @@ internal object MemberMapperImpl : MemberMapper {
             id = entity.id.value,
             orgID = entity.orgID.value,
             minecraftUUID = UUID.fromString(entity.minecraftUUID),
-            minecraftName = entity.minecraftName
+            minecraftName = entity.minecraftName,
+            isOwner = entity.isOwner
         )
     }
 }

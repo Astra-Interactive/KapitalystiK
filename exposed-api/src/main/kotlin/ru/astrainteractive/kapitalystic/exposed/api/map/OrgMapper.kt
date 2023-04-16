@@ -19,7 +19,7 @@ internal class OrgMapperImpl(
             status = entity.status,
             members = entity.members.map(memberMapper::toDTO),
             warps = entity.warps.map(warpMapper::toDTO),
-            leader = entity.owner.let(memberMapper::toDTO)
+            leader = entity.members.first { it.isOwner }.let(memberMapper::toDTO)
         )
     }
 }

@@ -2,6 +2,7 @@ package ru.astrainteractive.kapitalystic.shared.controllers.validators
 
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.astralibs.events.DSLEvent
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
@@ -35,3 +36,4 @@ class EconomyConfigurationValidator(
         return false
     }
 }
+

@@ -7,10 +7,9 @@ OrgTable <|-- MemberTable
 class OrgTable {
     int id
     varchar tag
-    varchar name
+    varchar name    
     varchar status
     varchar description
-    varchar owner_uuid
 }
 
 class WarpsTable {
@@ -35,5 +34,6 @@ class MemberTable {
     int org_id
     varchar minecraftName
     varchar minecraftUUID
+    bool is_owner
 }
 ```

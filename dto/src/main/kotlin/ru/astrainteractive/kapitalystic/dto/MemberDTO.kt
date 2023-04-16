@@ -6,5 +6,6 @@ class MemberDTO(
     val id: Long,
     val orgID: Long,
     val minecraftName: String,
-    val minecraftUUID: UUID
+    val minecraftUUID: UUID,
+    val isOwner: Boolean
 )

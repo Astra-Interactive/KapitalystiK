@@ -8,5 +8,4 @@ internal object OrgTable : LongIdTable() {
     val name = varchar("name", 32).uniqueIndex()
     val status = text("status")
     val description = text("description")
-    val ownerUUID = reference("owner_uuid", MemberTable.minecraftUUID).uniqueIndex()
 }

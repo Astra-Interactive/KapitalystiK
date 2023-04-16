@@ -1,5 +1,7 @@
 package ru.astrainteractive.kapitalystik.plugin
 
+import org.bukkit.event.player.PlayerJoinEvent
+import ru.astrainteractive.astralibs.events.DSLEvent
 import ru.astrainteractive.astralibs.utils.Permission
 
 sealed class Permissions(override val value: String) : Permission {

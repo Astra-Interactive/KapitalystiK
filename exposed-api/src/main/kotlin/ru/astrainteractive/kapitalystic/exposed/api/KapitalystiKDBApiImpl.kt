@@ -57,13 +57,13 @@ internal class KapitalystiKDBApiImpl(
                 this.name = name
                 this.description = ""
                 this.status = ""
-                this.ownerUUID = executorDTO.minecraftUUID.toString()
 
             }
             MemberDAO.new {
                 this.minecraftUUID = executorDTO.minecraftUUID.toString()
                 this.minecraftName = executorDTO.minecraftName
                 this.orgID = orgDAO.id
+                this.isOwner = true
             }
             OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
         }
@@ -163,6 +163,7 @@ internal class KapitalystiKDBApiImpl(
                 this.minecraftName = executorDTO.minecraftName
                 this.minecraftUUID = executorDTO.minecraftUUID.toString()
                 this.orgID = org.id
+                this.isOwner = false
             }.let(memberMapper::toDTO)
         }
     }
@@ -187,9 +188,12 @@ internal class KapitalystiKDBApiImpl(
             if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
             val ownerDAO = dbCommon.fetchMember(executorDTO)
             val newOwnerDao = dbCommon.fetchMember(userDTO).toDAO()
-            val org = dbCommon.fetchOrg(ownerDAO).toDAO()
-            org.ownerUUID = newOwnerDao.minecraftUUID
-            org.owner = newOwnerDao
+            MemberDAO.findById(newOwnerDao.id)?.apply {
+                this.isOwner = true
+            }
+            MemberDAO.findById(ownerDAO.id)?.apply {
+                this.isOwner = false
+            }
         }
     }
 

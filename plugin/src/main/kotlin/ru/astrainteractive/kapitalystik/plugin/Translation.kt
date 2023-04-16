@@ -1,6 +1,6 @@
 package ru.astrainteractive.kapitalystik.plugin
 
-import ru.astrainteractive.astralibs.file_manager.FileManager
+import ru.astrainteractive.astralibs.file_manager.SpigotFileManager
 import ru.astrainteractive.astralibs.utils.BaseTranslation
 import ru.astrainteractive.astralibs.utils.HEX
 import ru.astrainteractive.kapitalystic.dto.UserDTO
@@ -13,7 +13,7 @@ class Translation : BaseTranslation(), SharedTranslation {
     /**
      * This is a default translation file. Don't forget to create translation.yml in resources of the plugin
      */
-    protected override val translationFile: FileManager = FileManager("translations.yml")
+    protected override val translationFile: SpigotFileManager = SpigotFileManager("translations.yml")
     override val prefix = "#18dbd1[KapitalystiK]".HEX()
 
     private val positiveColor = "#42f596"

@@ -10,4 +10,5 @@ internal class MemberDAO(id: EntityID<Long>) : LongEntity(id) {
     var minecraftName by MemberTable.minecraftName
     var minecraftUUID by MemberTable.minecraftUUID
     var orgID by MemberTable.orgID
+    var isOwner by MemberTable.isOwner
 }
