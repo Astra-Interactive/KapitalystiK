@@ -2,16 +2,23 @@ package ru.astrainteractive.kapitalystik.commands
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.async.BukkitAsync
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.commands.Argument
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.commands.registerTabCompleter
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.astralibs.utils.withEntry
 import ru.astrainteractive.kapitalystic.dto.LocationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.ClanManagementController
@@ -19,11 +26,11 @@ import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 import ru.astrainteractive.kapitalystik.plugin.Permissions
 
 class ClanManagementCM(
-    controller: Dependency<ClanManagementController>,
+    cmcModule: Dependency<ClanManagementController>,
     translation: Dependency<SharedTranslation>,
     plugin: Plugin
 ) {
-    private val controller by controller
+    private val controller by cmcModule
     private val translation by translation
 
     /**
@@ -63,6 +70,27 @@ class ClanManagementCM(
         return false
     }
 
+    private val kptArgs = AstraLibs.instance.registerTabCompleter("kpt") {
+        if (args.size==1){
+            listOf(
+                "create",
+                "setwarp",
+                "spawn",
+                "publicwarp",
+                "disband",
+                "rename",
+                "invite",
+                "accept",
+                "kick",
+                "transfer",
+                "bio",
+                "description",
+                "list",
+                "org"
+            ).withEntry(this.args.last())
+        } else Bukkit.getOnlinePlayers().map(Player::getName)
+    }
+
     private val kpt = plugin.registerCommand("kpt") {
         when (args.getOrNull(0)) {
             "create" -> createOrganization()
@@ -77,7 +105,7 @@ class ClanManagementCM(
             "transfer" -> transfer()
             "bio" -> setDescription()
             "description" -> setDescription()
-            "list" -> TODO()
+            "list" -> getOrgList()
             "org" -> TODO()
         }
     }
@@ -283,6 +311,27 @@ class ClanManagementCM(
                 userDTO = sender.toUserDTO(),
                 description = description,
             )
+        }
+    }
+
+    /**
+     * /kpt list <page>
+     */
+    private fun Command.getOrgList() {
+        val page = argument(1) { it?.toIntOrNull() }.validateUsage(sender) ?: return
+        val sender = sender.validatePlayer() ?: return
+        PluginScope.launch(Dispatchers.BukkitAsync) {
+            controller.getPagedOrgs(page, sender.toUserDTO()).onSuccess {
+                it.forEach {
+                    Component
+                        .text(it.name)
+                        .color(TextColor.color(0xFFFFFF))
+                        .append(Component.newline())
+                        .append(Component.text("Members: ${it.members.size}"))
+                        .append(Component.newline())
+                        .append(Component.text("Leader: ${it.leader.minecraftName}"))
+                }
+            }
         }
     }
 }

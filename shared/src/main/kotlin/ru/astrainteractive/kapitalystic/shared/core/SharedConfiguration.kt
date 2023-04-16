@@ -1,27 +1,27 @@
 package ru.astrainteractive.kapitalystic.shared.core
+
+import kotlinx.serialization.Serializable
+
 /**
  * Shared configuration interface to use it on both Spigot and other platforms
  */
-interface SharedConfiguration {
-    val economy: Economy
-
-    interface Economy {
-        val isEnabled: Boolean
-        val create: Int
-        val rename: Int
-        val invite: Int
-        val bio: Int
-        val spawn: Spawn
-        val rules: Rules
-
-        interface Spawn {
-            val set: Int
-            val visibility: Int
-        }
-
-        interface Rules {
-            val add: Int
-            val remove: Int
-        }
+@Serializable
+data class SharedConfiguration(
+    val economy: Economy = Economy()
+) {
+    @Serializable
+    data class Economy(
+        val enabled: Boolean = false,
+        val create: Int = 10000,
+        val rename: Int = 500,
+        val invite: Int = 0,
+        val bio: Int = 0,
+        val spawn: Spawn = Spawn(),
+    ) {
+        @Serializable
+        data class Spawn(
+            val set: Int = 0,
+            val visibility: Int = 0
+        )
     }
 }

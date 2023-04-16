@@ -68,7 +68,7 @@ internal class KapitalystiKDBApiImpl(
             OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
         }
 
-    }
+    }.printFailure()
 
     override suspend fun setStatus(
         status: String,
@@ -79,7 +79,7 @@ internal class KapitalystiKDBApiImpl(
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.status = status
         }
-    }
+    }.printFailure()
 
     override suspend fun setDescription(
         description: String,
@@ -90,7 +90,7 @@ internal class KapitalystiKDBApiImpl(
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.description = description
         }
-    }
+    }.printFailure()
 
     override suspend fun setWarpPublic(
         isPublic: Boolean,
@@ -103,7 +103,7 @@ internal class KapitalystiKDBApiImpl(
             WarpsDAO.find(it)
         }.firstOrNull() ?: throw DBException.UnexpectedException
         warp.isPrivate = !isPublic
-    }
+    }.printFailure()
 
     override suspend fun disband(
         executorDTO: UserDTO
@@ -122,7 +122,7 @@ internal class KapitalystiKDBApiImpl(
             }
             org.delete()
         }
-    }
+    }.printFailure()
 
     override suspend fun rename(
         newName: String,
@@ -133,7 +133,7 @@ internal class KapitalystiKDBApiImpl(
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.name = newName
         }
-    }
+    }.printFailure()
 
     override suspend fun invite(
         userDTO: UserDTO,
@@ -150,7 +150,7 @@ internal class KapitalystiKDBApiImpl(
                 this.orgID = EntityID(orgID, OrgTable)
             }
         }
-    }
+    }.printFailure()
 
     override suspend fun acceptInvitation(
         executorDTO: UserDTO,
@@ -166,7 +166,7 @@ internal class KapitalystiKDBApiImpl(
                 this.isOwner = false
             }.let(memberMapper::toDTO)
         }
-    }
+    }.printFailure()
 
     override suspend fun kickMember(
         userDTO: UserDTO,
@@ -177,7 +177,7 @@ internal class KapitalystiKDBApiImpl(
             if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
             dbCommon.fetchMember(userDTO).toDAO().delete()
         }
-    }
+    }.printFailure()
 
     override suspend fun transferOwnership(
         userDTO: UserDTO,
@@ -195,18 +195,25 @@ internal class KapitalystiKDBApiImpl(
                 this.isOwner = false
             }
         }
-    }
+    }.printFailure()
 
-    override suspend fun fetchAllOrganizations(): Result<List<OrganizationDTO>> = kotlin.runCatching {
-        OrgDAO.all().map(orgMapper::toDTO)
-    }
+    override suspend fun fetchAllOrganizations(
+        limit: Int,
+        offset: Long
+    ): Result<List<OrganizationDTO>> = kotlin.runCatching {
+        val query = OrgDAO.all().apply {
+            if (limit != -1)
+                limit(limit, offset)
+        }
+        query.map(orgMapper::toDTO)
+    }.printFailure()
 
     override suspend fun fetchOrganization(
         id: Long
     ): Result<OrganizationDTO> = kotlin.runCatching {
         val org = OrgDAO.findById(id)?.let(orgMapper::toDTO)
         org ?: throw DBException.UnexpectedException
-    }
+    }.printFailure()
 
     override suspend fun fetchOrganization(
         tag: String
@@ -215,13 +222,13 @@ internal class KapitalystiKDBApiImpl(
             val org = OrgDAO.find(OrgTable.tag.eq(tag)).firstOrNull()
             org?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
         }
-    }
+    }.printFailure()
 
     override suspend fun fetchUserOrganization(
         executorDTO: UserDTO
     ): Result<OrganizationDTO> = kotlin.runCatching {
         dbCommon.fetchOrg(executorDTO)
-    }
+    }.printFailure()
 
     override suspend fun setWarp(
         locationDTO: LocationDTO,
@@ -239,5 +246,10 @@ internal class KapitalystiKDBApiImpl(
             this.worldName = locationDTO.world
             this.isPrivate = true
         }.let(warpMapper::toDTO)
+    }.printFailure()
+
+    private fun <T> Result<T>.printFailure() = onFailure {
+        it.printStackTrace()
     }
+
 }

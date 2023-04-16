@@ -1,7 +1,9 @@
 package ru.astrainteractive.kapitalystik.commands
 
+import org.bukkit.plugin.Plugin
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.kapitalystic.shared.controllers.ClanManagementController
 import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 
 /**
@@ -10,10 +12,10 @@ import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
  * @see Reload
  */
 class CommandManager(
-    translationModule: Dependency<SharedTranslation>
+    cmcModule: Dependency<ClanManagementController>,
+    translationModule: Dependency<SharedTranslation>,
+    plugin: Plugin
 ) {
-    private val translation by translationModule
-
     /**
      * Here you should declare commands for your plugin
      *
@@ -22,8 +24,11 @@ class CommandManager(
      * etemp has TabCompleter
      */
     init {
-        reload(
-            translationModule = translationModule
+        reload(translationModule)
+        ClanManagementCM(
+            cmcModule,
+            translationModule,
+            plugin
         )
     }
 }

@@ -2,7 +2,6 @@ package ru.astrainteractive.kapitalystic.shared.controllers.validators
 
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.astralibs.events.DSLEvent
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
@@ -28,7 +27,7 @@ class EconomyConfigurationValidator(
      * @return true if ok false if player has not enough money
      */
     fun validate(userDTO: UserDTO, needAmount: Number): Boolean {
-        if (configuration.economy.isEnabled) return true
+        if (configuration.economy.enabled) return true
         val creationPrice = needAmount.toDouble()
         val balance = economyProvider.getBalance(userDTO.minecraftUUID) ?: 0.0
         if (balance >= creationPrice) return true

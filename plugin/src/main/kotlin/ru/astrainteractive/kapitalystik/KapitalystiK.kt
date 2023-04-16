@@ -9,6 +9,7 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.SharedInventoryClickEvent
 import ru.astrainteractive.astralibs.utils.Singleton
+import ru.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
 import ru.astrainteractive.astralibs.utils.setupWithSpigot
 import ru.astrainteractive.kapitalystik.modules.ServiceLocator
 import ru.astrainteractive.kapitalystik.plugin.Files
@@ -31,12 +32,14 @@ class KapitalystiK : JavaPlugin() {
     override fun onEnable() {
         AstraLibs.rememberPlugin(this)
         Logger.setupWithSpigot("AstraTemplate", this)
+        ServiceLocator.database.value
         commandManager
         GlobalEventListener.onEnable(this)
         SharedInventoryClickEvent.onEnable(this)
         Logger.log("Logger enabled", "AstraTemplate")
         Logger.warn("Warn message from logger", "AstraTemplate")
         Logger.error("Error message", "AstraTemplate")
+        VaultEconomyProvider.onEnable()
     }
 
     /**
@@ -47,13 +50,14 @@ class KapitalystiK : JavaPlugin() {
         GlobalEventListener.onDisable()
         SharedInventoryClickEvent.onDisable()
         PluginScope.close()
+        VaultEconomyProvider.onDisable()
     }
 
     /**
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-        Files.configFile.reload()
+//        Files.configFile.reload()
         ServiceLocator.PluginConfigModule.reload()
         ServiceLocator.TranslationModule.reload()
     }

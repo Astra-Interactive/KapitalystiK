@@ -6,6 +6,7 @@ import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.api.KapitalystiKDBApi
 import ru.astrainteractive.kapitalystic.dto.LocationDTO
+import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.shared.controllers.validators.EconomyConfigurationValidator
 import ru.astrainteractive.kapitalystic.shared.core.SharedConfiguration
@@ -229,7 +230,7 @@ class ClanManagementController(
         description: String,
         userDTO: UserDTO,
     ) {
-        val economyPrice = configuration.economy.rules.add.toDouble()
+        val economyPrice = configuration.economy.bio.toDouble()
         if (!economyConfigurationValidator.validate(userDTO, economyPrice)) return
 
         dbApi.setDescription(
@@ -239,5 +240,20 @@ class ClanManagementController(
             val message = translation.ruleAdded
             messageHandler.sendMessage(userDTO, message)
         }.handleFailure(userDTO)
+    }
+
+    /**
+     * /kpt list <page>
+     */
+    suspend fun getPagedOrgs(
+        page: Int,
+        userDTO: UserDTO
+    ): Result<List<OrganizationDTO>> {
+        val limit = 5
+        val offset = page * limit * 1L
+        return dbApi.fetchAllOrganizations(
+            limit = limit,
+            offset = offset
+        ).handleFailure(userDTO)
     }
 }

@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.assertThrows
 import ru.astrainteractive.kapitalystic.api.DBException
 import ru.astrainteractive.kapitalystic.exposed.api.utils.ORMTest
+import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

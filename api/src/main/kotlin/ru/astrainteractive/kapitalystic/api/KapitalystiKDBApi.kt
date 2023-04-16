@@ -76,8 +76,10 @@ interface KapitalystiKDBApi {
 
     /**
      * Fetch list of all organizations
+     * @param limit - limit amount. If equals -1 - all organizations will be retrieved
+     * @param offset offset according to limit
      */
-    suspend fun fetchAllOrganizations(): Result<List<OrganizationDTO>>
+    suspend fun fetchAllOrganizations(limit: Int, offset: Long): Result<List<OrganizationDTO>>
 
     /**
      * Fetch organization by its id

@@ -1,4 +1,4 @@
-main: ru.astrainteractive.kapitalystic.KapitalystiK
+main: ru.astrainteractive.kapitalystik.KapitalystiK
 prefix: '${name}'
 description: '${description}'
 version: '${version}'
@@ -12,3 +12,4 @@ depend: [ ]
 loadbefore: [ ]
 commands:
   kptreload:
+  kpt:

@@ -1,11 +1,13 @@
 package ru.astrainteractive.kapitalystik.modules
 
+import ru.astrainteractive.astralibs.EmpireSerializer
 import ru.astrainteractive.astralibs.di.Reloadable
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.di.module
 import ru.astrainteractive.astralibs.di.reloadable
 import ru.astrainteractive.astralibs.utils.economy.EconomyProvider
 import ru.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
+import ru.astrainteractive.astralibs.utils.toClass
 import ru.astrainteractive.kapitalystic.exposed.api.factories.DatabaseFactory
 import ru.astrainteractive.kapitalystic.exposed.api.factories.KapitalystiKCommonDBApiFactory
 import ru.astrainteractive.kapitalystic.exposed.api.factories.KapitalystiKDBApiFactory
@@ -15,24 +17,28 @@ import ru.astrainteractive.kapitalystic.shared.core.SharedTranslation
 import ru.astrainteractive.kapitalystic.shared.utils.MessageHandler
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.commands.CommandManager
+import ru.astrainteractive.kapitalystik.plugin.Files
 import ru.astrainteractive.kapitalystik.plugin.Translation
 import ru.astrainteractive.kapitalystik.utils.SpigotMessageHandler
 import java.io.File
 
 object ServiceLocator {
     val PluginConfigModule: Reloadable<SharedConfiguration> = reloadable {
-        TODO()
+
+        EmpireSerializer.toClass<SharedConfiguration>(Files.configFile.loadConfigFile()) ?: SharedConfiguration()
     }
     val TranslationModule = reloadable {
         Translation() as SharedTranslation
     }
     val commandManager = module {
         CommandManager(
+            clanManagementController,
             translationModule = TranslationModule,
+            KapitalystiK.instance
         )
     }
     val database = module {
-        val dbFile = File(KapitalystiK.instance.dataFolder, "data.db")
+        val dbFile = File(KapitalystiK.instance.dataFolder, "kapitalystic.db")
         DatabaseFactory(dbFile.path).value
     }
     val kapitalystiKCommonApi = module {

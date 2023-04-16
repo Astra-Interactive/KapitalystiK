@@ -13,8 +13,5 @@
 | ✔️`/kpt kick <user>`             | Kick user from your ogranization \<tag>             | kapitalystic.kick            |
 | ✔️`/kpt transfer <user>`         | Give organization leadership to other player \<tag> | kapitalystic.transfer        |
 | ✔️`/kpt description <message>`   | Change town BIO                                     | kapitalystic.bio             |
-| ❌`/kpt rules`                    | List town rules                                     | kapitalystic.rules.list      |
-| ❌`/kpt rules add <index> <rule>` | Add new rule to town                                | kapitalystic.rules.add       |
-| ❌`/kpt rules remove <index>`     | Remove rule at index \<index>                       | kapitalystic.rules.remove    |
-| ❌`/kpt list`                     | List of current organizations                       | kapitalystic.orgs.list       |
+| ❌`/kpt list <page>`              | List of current organizations                       | kapitalystic.orgs.list       |
 | ❌`/kpt org <tag> info`           | Organization info                                   | kapitalystic.orgs.info       |
