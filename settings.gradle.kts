@@ -1,5 +1,4 @@
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
         maven("https://plugins.gradle.org/m2/")
         maven("https://jitpack.io")
@@ -39,11 +38,14 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "KapitalystiK"
 
 // Spigot
 include("plugin")
-include("shared")
-include("dto")
-include("api")
-include("exposed-api")
+// Services
+include("modules:services:api")
+include("modules:services:dto")
+// Features
+include("modules:features:root")

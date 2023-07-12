@@ -1,12 +1,11 @@
-main: ru.astrainteractive.kapitalystik.KapitalystiK
+main: '${main}'
 prefix: '${name}'
-description: '${description}'
-version: '${version}'
 name: '${name}'
-authors: [ MakeevRoman ]
-author: MakeevRoman
-website: AstraInteractive.ru
-api-version: 1.16
+version: '${version}'
+description: '${description}'
+api-version: '1.16'
+authors: [ "${authors}" ]
+website: "${url}"
 softdepend: [ ]
 depend: [ ]
 loadbefore: [ ]

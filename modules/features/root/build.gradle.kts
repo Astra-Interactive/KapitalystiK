@@ -1,6 +1,3 @@
-import ru.astrainteractive.gradleplugin.setupSpigotProcessor
-import ru.astrainteractive.gradleplugin.setupSpigotShadow
-
 plugins {
     kotlin("jvm")
 }
@@ -19,15 +16,10 @@ dependencies {
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
-    compileOnly(libs.minecraft.vaultapi)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     // Local
-    implementation(projects.modules.features.root)
     implementation(projects.modules.services.dto)
     implementation(projects.modules.services.api)
 }
-
-setupSpigotShadow()
-setupSpigotProcessor()

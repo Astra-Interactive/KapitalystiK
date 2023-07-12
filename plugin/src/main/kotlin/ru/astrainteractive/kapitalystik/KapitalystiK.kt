@@ -2,63 +2,49 @@ package ru.astrainteractive.kapitalystik
 
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.astralibs.AstraLibs
-import ru.astrainteractive.astralibs.Logger
+import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.GlobalEventListener
-import ru.astrainteractive.astralibs.menu.event.SharedInventoryClickEvent
-import ru.astrainteractive.astralibs.utils.Singleton
-import ru.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
-import ru.astrainteractive.astralibs.utils.setupWithSpigot
-import ru.astrainteractive.kapitalystik.modules.ServiceLocator
-import ru.astrainteractive.kapitalystik.plugin.Files
+import ru.astrainteractive.astralibs.getValue
+import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
+import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 
 /**
  * Initial class for your plugin
  */
 class KapitalystiK : JavaPlugin() {
-    companion object : Singleton<KapitalystiK>()
 
     init {
-        instance = this
+        SpigotRootModule.plugin.initialize(this)
     }
-
-    private val commandManager by ServiceLocator.commandManager
 
     /**
      * This method called when server starts or PlugMan load plugin.
      */
+    @UnsafeApi
     override fun onEnable() {
-        AstraLibs.rememberPlugin(this)
-        Logger.setupWithSpigot("AstraTemplate", this)
-        ServiceLocator.database.value
-        commandManager
+        SpigotRootModule.database.value
+        SpigotRootModule.commandManager
         GlobalEventListener.onEnable(this)
-        SharedInventoryClickEvent.onEnable(this)
-        Logger.log("Logger enabled", "AstraTemplate")
-        Logger.warn("Warn message from logger", "AstraTemplate")
-        Logger.error("Error message", "AstraTemplate")
-        VaultEconomyProvider.onEnable()
+        GlobalInventoryClickEvent.onEnable(this)
     }
 
     /**
      * This method called when server is shutting down or when PlugMan disable plugin.
      */
+    @UnsafeApi
     override fun onDisable() {
         HandlerList.unregisterAll(this)
         GlobalEventListener.onDisable()
-        SharedInventoryClickEvent.onDisable()
+        GlobalInventoryClickEvent.onDisable()
         PluginScope.close()
-        VaultEconomyProvider.onDisable()
     }
 
     /**
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-//        Files.configFile.reload()
-        ServiceLocator.PluginConfigModule.reload()
-        ServiceLocator.TranslationModule.reload()
+        SpigotRootModule.configuration.reload()
+        SpigotRootModule.translation.reload()
     }
 }
