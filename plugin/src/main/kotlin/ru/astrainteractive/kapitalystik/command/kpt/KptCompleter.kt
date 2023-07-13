@@ -7,8 +7,9 @@ import ru.astrainteractive.astralibs.utils.withEntry
 
 object KptCompleter {
     fun KptCommandManager.completer() = plugin.registerTabCompleter("kpt") {
-        if (args.size == 1) {
-            listOf(
+        val default = Bukkit.getOnlinePlayers().map(Player::getName)
+        when {
+            args.size == 1 -> listOf(
                 "create",
                 "setwarp",
                 "spawn",
@@ -24,8 +25,8 @@ object KptCompleter {
                 "list",
                 "org"
             ).withEntry(this.args.last())
-        } else {
-            Bukkit.getOnlinePlayers().map(Player::getName)
+
+            else -> default
         }
     }
 }
