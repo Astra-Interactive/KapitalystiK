@@ -1,0 +1,3 @@
+package ru.astrainteractive.kapitalystic.features.controllers
+
+class CreateClanControllerTest

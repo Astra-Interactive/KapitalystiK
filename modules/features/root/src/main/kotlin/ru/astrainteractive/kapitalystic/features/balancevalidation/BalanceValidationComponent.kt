@@ -12,11 +12,10 @@ internal class BalanceValidationComponent(
 ) : BalanceValidation, BalanceValidationModule by module {
 
     override fun haveAtLeast(userDTO: UserDTO, requiredAmount: Number): Boolean {
-        if (configuration.economy.enabled) return true
+        if (!isEconomyEnabled) return true
         val creationPrice = requiredAmount.toDouble()
         val balance = economyProvider.getBalance(userDTO.minecraftUUID) ?: 0.0
         if (balance >= creationPrice) return true
-        platformMessenger.sendMessage(userDTO, translation.notEnoughMoney(creationPrice.toInt()))
         return false
     }
 
