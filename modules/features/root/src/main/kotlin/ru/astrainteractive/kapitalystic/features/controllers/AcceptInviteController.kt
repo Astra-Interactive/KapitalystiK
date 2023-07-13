@@ -1,5 +1,6 @@
 package ru.astrainteractive.kapitalystic.features.controllers
 
+import ru.astrainteractive.kapitalystic.dto.MemberDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.features.controllers.di.ClanManagementControllerModule
 
@@ -13,16 +14,10 @@ class AcceptInviteController(
     suspend fun acceptClanInvite(
         userDTO: UserDTO,
         clanTAG: String,
-    ) {
-        dbApi.acceptInvitation(
+    ): MemberDTO {
+        return dbApi.acceptInvitation(
             executorDTO = userDTO,
             orgTag = clanTAG
-        ).onSuccess {
-            val message = translation.joinedToClan(clanTAG)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
     }
 }

@@ -14,15 +14,9 @@ class TransferController(
         userDTO: UserDTO,
         initiatorDTO: UserDTO,
     ) {
-        dbApi.transferOwnership(
+        return dbApi.transferOwnership(
             userDTO = userDTO,
             executorDTO = initiatorDTO
-        ).onSuccess {
-            val message = translation.ownershipTransferred(userDTO)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
     }
 }

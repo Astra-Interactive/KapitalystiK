@@ -13,15 +13,9 @@ class KickController(
         userDTO: UserDTO,
         initiatorDTO: UserDTO,
     ) {
-        dbApi.kickMember(
+        return dbApi.kickMember(
             userDTO = userDTO,
             executorDTO = initiatorDTO
-        ).onSuccess {
-            val message = translation.userKicked(userDTO)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
     }
 }

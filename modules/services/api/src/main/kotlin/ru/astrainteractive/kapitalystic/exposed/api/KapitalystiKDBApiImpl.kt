@@ -49,9 +49,9 @@ internal class KapitalystiKDBApiImpl(
         tag: String,
         name: String,
         executorDTO: UserDTO
-    ): Result<OrganizationDTO> = kotlin.runCatching {
+    ): OrganizationDTO {
         if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
-        transaction {
+        return transaction {
             val orgDAO = OrgDAO.new org@{
                 this.tag = tag
                 this.name = name
@@ -66,46 +66,46 @@ internal class KapitalystiKDBApiImpl(
             }
             OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
         }
-    }.printFailure()
+    }
 
     override suspend fun setStatus(
         status: String,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         transaction {
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.status = status
         }
-    }.printFailure()
+    }
 
     override suspend fun setDescription(
         description: String,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         transaction {
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.description = description
         }
-    }.printFailure()
+    }
 
     override suspend fun setWarpPublic(
         isPublic: Boolean,
         warpTAG: String,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         val member = dbCommon.fetchMember(executorDTO)
         val warp = WarpsTable.tag.eq(warpTAG).and(WarpsTable.orgID.eq(member.orgID)).let {
             WarpsDAO.find(it)
         }.firstOrNull() ?: throw DBException.UnexpectedException
         warp.isPrivate = !isPublic
-    }.printFailure()
+    }
 
     override suspend fun disband(
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         transaction {
             val org = runBlocking { dbCommon.fetchOrg(executorDTO).toDAO() }
@@ -120,23 +120,23 @@ internal class KapitalystiKDBApiImpl(
             }
             org.delete()
         }
-    }.printFailure()
+    }
 
     override suspend fun rename(
         newName: String,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         transaction {
             val org = dbCommon.fetchOrg(executorDTO).toDAO()
             org.name = newName
         }
-    }.printFailure()
+    }
 
     override suspend fun invite(
         userDTO: UserDTO,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         transaction {
             if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
             val member = dbCommon.fetchMember(executorDTO)
@@ -148,13 +148,13 @@ internal class KapitalystiKDBApiImpl(
                 this.orgID = EntityID(orgID, OrgTable)
             }
         }
-    }.printFailure()
+    }
 
     override suspend fun acceptInvitation(
         executorDTO: UserDTO,
         orgTag: String
-    ): Result<MemberDTO> = kotlin.runCatching {
-        transaction {
+    ): MemberDTO {
+        return transaction {
             if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
             val org = dbCommon.fetchOrg(orgTag).toDAO()
             MemberDAO.new {
@@ -164,23 +164,23 @@ internal class KapitalystiKDBApiImpl(
                 this.isOwner = false
             }.let(memberMapper::toDTO)
         }
-    }.printFailure()
+    }
 
     override suspend fun kickMember(
         userDTO: UserDTO,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         transaction {
             if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
             if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
             dbCommon.fetchMember(userDTO).toDAO().delete()
         }
-    }.printFailure()
+    }
 
     override suspend fun transferOwnership(
         userDTO: UserDTO,
         executorDTO: UserDTO
-    ): Result<*> = kotlin.runCatching {
+    ) {
         transaction {
             if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
             if (!dbCommon.isMember(userDTO)) throw DBException.NotOrganizationMember
@@ -193,50 +193,48 @@ internal class KapitalystiKDBApiImpl(
                 this.isOwner = false
             }
         }
-    }.printFailure()
+    }
 
     override suspend fun fetchAllOrganizations(
         limit: Int,
         offset: Long
-    ): Result<List<OrganizationDTO>> = kotlin.runCatching {
+    ): List<OrganizationDTO> {
         val query = OrgDAO.all().apply {
             if (limit != -1) {
                 limit(limit, offset)
             }
         }
-        query.map(orgMapper::toDTO)
-    }.printFailure()
+        return query.map(orgMapper::toDTO)
+    }
 
     override suspend fun fetchOrganization(
         id: Long
-    ): Result<OrganizationDTO> = kotlin.runCatching {
+    ): OrganizationDTO {
         val org = OrgDAO.findById(id)?.let(orgMapper::toDTO)
-        org ?: throw DBException.UnexpectedException
-    }.printFailure()
+        return org ?: throw DBException.UnexpectedException
+    }
 
     override suspend fun fetchOrganization(
         tag: String
-    ): Result<OrganizationDTO> = kotlin.runCatching {
-        transaction {
+    ): OrganizationDTO {
+        return transaction {
             val org = OrgDAO.find(OrgTable.tag.eq(tag)).firstOrNull()
             org?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
         }
-    }.printFailure()
+    }
 
     override suspend fun fetchUserOrganization(
         executorDTO: UserDTO
-    ): Result<OrganizationDTO> = kotlin.runCatching {
-        dbCommon.fetchOrg(executorDTO)
-    }.printFailure()
+    ): OrganizationDTO = dbCommon.fetchOrg(executorDTO)
 
     override suspend fun setWarp(
         locationDTO: LocationDTO,
         executorDTO: UserDTO,
         tag: String
-    ): Result<WarpDTO> = kotlin.runCatching {
+    ): WarpDTO {
         if (!dbCommon.isOwner(executorDTO)) throw DBException.NotOrganizationOwner
         val member = dbCommon.fetchMember(executorDTO).toDAO()
-        WarpsDAO.new {
+        return WarpsDAO.new {
             this.orgID = member.orgID
             this.tag = tag
             this.x = locationDTO.x
@@ -245,9 +243,5 @@ internal class KapitalystiKDBApiImpl(
             this.worldName = locationDTO.world
             this.isPrivate = true
         }.let(warpMapper::toDTO)
-    }.printFailure()
-
-    private fun <T> Result<T>.printFailure() = onFailure {
-        it.printStackTrace()
     }
 }

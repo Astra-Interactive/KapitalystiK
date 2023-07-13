@@ -1,6 +1,7 @@
 package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -15,6 +16,21 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class EditWarpCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "publicwarp"
+    val controller = clanManagementControllers.makeWarpPublicController.build()
+
+    private suspend fun execute(sender: Player, isPublic: Boolean, tag: String) = runCatching {
+        controller.makeWarpPublic(
+            userDTO = sender.toUserDTO(),
+            isPublic = isPublic,
+            warpTAG = tag
+        )
+    }.onSuccess {
+        val message = translation.spawnPublic(isPublic)
+        sender.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        sender.sendMessage(message)
+    }
 
     override fun Command.call() {
         if (!sender.validatePermission(Permissions.Warp.Visibility, translation)) return
@@ -25,12 +41,7 @@ class EditWarpCommand(module: CommandManagerModule) : CommandManagerModule by mo
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.makeWarpPublicController.build()
-            controller.makeWarpPublic(
-                userDTO = sender.toUserDTO(),
-                isPublic = isPublic,
-                warpTAG = tag
-            )
+            execute(sender, isPublic, tag)
         }
     }
 }

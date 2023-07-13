@@ -2,7 +2,9 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
@@ -16,6 +18,19 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class KickCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "kick"
+    val controller = clanManagementControllers.kickController.build()
+    private suspend fun execute(memberDTO: UserDTO, sender: Player) = runCatching {
+        controller.kickFromClan(
+            userDTO = memberDTO,
+            initiatorDTO = sender.toUserDTO(),
+        )
+    }.onSuccess {
+        val message = translation.userKicked(memberDTO)
+        sender.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        sender.sendMessage(message)
+    }
 
     override fun Command.call() {
         val hasPermission = sender.validatePermission(
@@ -31,11 +46,7 @@ class KickCommand(module: CommandManagerModule) : CommandManagerModule by module
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.kickController.build()
-            controller.kickFromClan(
-                userDTO = memberDTO,
-                initiatorDTO = sender.toUserDTO(),
-            )
+            execute(memberDTO, sender)
         }
     }
 }

@@ -2,6 +2,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -16,6 +17,20 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class InviteCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "rename"
+    val controller = clanManagementControllers.inviteController.build()
+
+    private suspend fun execute(user: Player, initiator: Player) = runCatching {
+        controller.inviteToClan(
+            userDTO = user.toUserDTO(),
+            initiatorDTO = initiator.toUserDTO(),
+        )
+    }.onSuccess {
+        val message = translation.userInvited(user.toUserDTO())
+        initiator.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        initiator.sendMessage(message)
+    }
 
     override fun Command.call() {
         val hasPermission = sender.validatePermission(
@@ -25,17 +40,13 @@ class InviteCommand(module: CommandManagerModule) : CommandManagerModule by modu
         if (!hasPermission) return
 
         val player = argument(1) {
-            it?.let(Bukkit::getPlayer)?.toUserDTO()
+            it?.let(Bukkit::getPlayer)
         }.validateUsage(sender, translation) ?: return
 
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.inviteController.build()
-            controller.inviteToClan(
-                userDTO = player,
-                initiatorDTO = sender.toUserDTO(),
-            )
+            execute(player, sender)
         }
     }
 }

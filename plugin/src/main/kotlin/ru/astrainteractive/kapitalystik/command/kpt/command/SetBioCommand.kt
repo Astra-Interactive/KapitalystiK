@@ -1,6 +1,7 @@
 package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -9,11 +10,26 @@ import ru.astrainteractive.kapitalystik.command.kpt.util.validatePermission
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePlayer
 import ru.astrainteractive.kapitalystik.command.kpt.util.validateUsage
 import ru.astrainteractive.kapitalystik.plugin.Permissions
+
 /**
  * /kpt bio <message>
  */
 class SetBioCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "bio"
+    val controller = clanManagementControllers.setStatusController.build()
+
+    private suspend fun execute(sender: Player, bio: String) = runCatching {
+        controller.setStatus(
+            userDTO = sender.toUserDTO(),
+            status = bio,
+        )
+    }.onSuccess {
+        val message = translation.bioChanged
+        sender.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        sender.sendMessage(message)
+    }
 
     override fun Command.call() {
         if (!sender.validatePermission(Permissions.Management.Bio, translation)) return
@@ -23,11 +39,7 @@ class SetBioCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.setStatusController.build()
-            controller.setStatus(
-                userDTO = sender.toUserDTO(),
-                status = bio,
-            )
+            execute(sender, bio)
         }
     }
 }

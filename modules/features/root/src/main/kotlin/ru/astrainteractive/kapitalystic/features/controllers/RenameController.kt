@@ -12,18 +12,13 @@ class RenameController(
      */
     suspend fun renameClan(userDTO: UserDTO, newName: String) {
         val economyPrice = configuration.economy.rename.toDouble()
-        if (!balanceValidation.validateAndNotify(userDTO, economyPrice)) return
+        balanceValidation.assertHaveAtLeast(userDTO, economyPrice)
 
-        dbApi.rename(
+        val result = dbApi.rename(
             newName = newName,
             executorDTO = userDTO
-        ).onSuccess {
-            val message = translation.clanRenamed(newName)
-            economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
+        economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
+        return result
     }
 }

@@ -4,30 +4,31 @@ sealed class DBException : Throwable() {
     /**
      * User is not a member of organization
      */
-    object NotOrganizationMember : DBException()
+    data object NotOrganizationMember : DBException()
 
     /**
      * User already in organization
      */
-    object AlreadyInOrganization : DBException()
+    data object AlreadyInOrganization : DBException()
 
     /**
      * User is not organization owner
      */
-    object NotOrganizationOwner : DBException()
+    data object NotOrganizationOwner : DBException()
 
     /**
      * User already invited to current organization
      */
-    object AlreadyInvited : DBException()
+    data object AlreadyInvited : DBException()
 
     /**
      * User not invited to organization of which he is trying to accept invitation
      */
-    object NotInvited : DBException()
+    data object NotInvited : DBException()
 
     /**
      * Unresolved exception has happened
      */
-    object UnexpectedException : DBException()
+    data object UnexpectedException : DBException()
+    class NotEnoughMoney(val required: Number) : DBException()
 }

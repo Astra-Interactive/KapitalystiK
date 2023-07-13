@@ -1,5 +1,6 @@
 package ru.astrainteractive.kapitalystic.features.controllers
 
+import ru.astrainteractive.kapitalystic.dto.OrganizationDTO
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.features.controllers.di.ClanManagementControllerModule
 
@@ -9,21 +10,16 @@ class CreateClanController(
     /**
      * /kpt create <tag> <name>
      */
-    suspend fun createClan(userDTO: UserDTO, tag: String, name: String) {
+    suspend fun createClan(userDTO: UserDTO, tag: String, name: String): OrganizationDTO {
         val economyPrice = configuration.economy.create.toDouble()
-        if (!balanceValidation.validateAndNotify(userDTO, economyPrice)) return
+        balanceValidation.assertHaveAtLeast(userDTO, economyPrice)
 
-        dbApi.create(
+        val clan = dbApi.create(
             tag = tag,
             name = name,
             executorDTO = userDTO
-        ).onSuccess {
-            val message = translation.clanCreated(name = name, tag = tag)
-            economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
+        economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
+        return clan
     }
 }

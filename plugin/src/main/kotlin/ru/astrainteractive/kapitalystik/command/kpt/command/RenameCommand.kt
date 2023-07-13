@@ -1,6 +1,7 @@
 package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -15,6 +16,20 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class RenameCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "rename"
+    val controller = clanManagementControllers.renameController.build()
+
+    private suspend fun execute(sender: Player, newName: String) = runCatching {
+        controller.renameClan(
+            userDTO = sender.toUserDTO(),
+            newName = newName,
+        )
+    }.onSuccess {
+        val message = translation.clanRenamed(newName)
+        sender.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        sender.sendMessage(message)
+    }
 
     override fun Command.call() {
         if (!sender.validatePermission(Permissions.Management.Rename, translation)) return
@@ -24,11 +39,7 @@ class RenameCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.renameController.build()
-            controller.renameClan(
-                userDTO = sender.toUserDTO(),
-                newName = newName,
-            )
+            execute(sender, newName)
         }
     }
 }

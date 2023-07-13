@@ -14,16 +14,10 @@ class MakeWarpPublicController(
         warpTAG: String,
         isPublic: Boolean
     ) {
-        dbApi.setWarpPublic(
+        return dbApi.setWarpPublic(
             isPublic = isPublic,
             warpTAG = warpTAG,
             executorDTO = userDTO
-        ).onSuccess {
-            val message = translation.spawnPublic(isPublic)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
     }
 }

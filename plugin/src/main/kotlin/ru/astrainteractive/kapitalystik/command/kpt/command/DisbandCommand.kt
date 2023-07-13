@@ -1,6 +1,7 @@
 package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
+import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.commands.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -8,11 +9,24 @@ import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePermission
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePlayer
 import ru.astrainteractive.kapitalystik.plugin.Permissions
+
 /**
  * /kpt disband
  */
 class DisbandCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "disband"
+    val controller = clanManagementControllers.disbandController.build()
+    private suspend fun execute(playerSender: Player) = runCatching {
+        controller.disband(
+            userDTO = playerSender.toUserDTO(),
+        )
+    }.onSuccess {
+        val message = translation.disbanded
+        playerSender.sendMessage(message)
+    }.onFailure {
+        val message = failureMessenger.asTranslationMessage(it)
+        playerSender.sendMessage(message)
+    }
 
     override fun Command.call() {
         if (!sender.validatePermission(Permissions.Management.Disband, translation)) return
@@ -20,10 +34,7 @@ class DisbandCommand(module: CommandManagerModule) : CommandManagerModule by mod
         val playerSender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            val controller = clanManagementControllers.disbandController.build()
-            controller.disband(
-                userDTO = playerSender.toUserDTO(),
-            )
+            execute(playerSender)
         }
     }
 }

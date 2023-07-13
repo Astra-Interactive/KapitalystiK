@@ -14,18 +14,13 @@ class SetStatusController(
         status: String,
     ) {
         val economyPrice = configuration.economy.bio.toDouble()
-        if (!balanceValidation.validateAndNotify(userDTO, economyPrice)) return
+        balanceValidation.assertHaveAtLeast(userDTO, economyPrice)
 
-        dbApi.setStatus(
+        val result = dbApi.setStatus(
             executorDTO = userDTO,
             status = status
-        ).onSuccess {
-            val message = translation.bioChanged
-            economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
+        economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
+        return result
     }
 }

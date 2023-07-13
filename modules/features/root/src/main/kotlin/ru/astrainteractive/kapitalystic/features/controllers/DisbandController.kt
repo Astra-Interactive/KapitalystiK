@@ -11,14 +11,8 @@ class DisbandController(
      * /kpt disband
      */
     suspend fun disband(userDTO: UserDTO) {
-        dbApi.disband(
+        return dbApi.disband(
             executorDTO = userDTO
-        ).onSuccess {
-            val message = translation.disbanded
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
     }
 }

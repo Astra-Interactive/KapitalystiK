@@ -14,18 +14,13 @@ class InviteController(
         initiatorDTO: UserDTO,
     ) {
         val economyPrice = configuration.economy.invite.toDouble()
-        if (!balanceValidation.validateAndNotify(userDTO, economyPrice)) return
+        balanceValidation.assertHaveAtLeast(userDTO, economyPrice)
 
-        dbApi.invite(
+        val result = dbApi.invite(
             userDTO = userDTO,
             executorDTO = initiatorDTO
-        ).onSuccess {
-            val message = translation.userInvited(userDTO)
-            economyProvider.takeMoney(userDTO.minecraftUUID, economyPrice)
-            messenger.sendMessage(userDTO, message)
-        }.onFailure {
-            val message = failureMessenger.asTranslationMessage(it)
-            messenger.sendMessage(userDTO, message)
-        }
+        )
+        economyProvider.takeMoney(initiatorDTO.minecraftUUID, economyPrice)
+        return result
     }
 }
