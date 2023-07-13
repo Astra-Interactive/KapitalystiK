@@ -15,9 +15,11 @@ import kotlin.test.assertFailsWith
 
 class CreateClanControllerTest {
     @BeforeTest
-    fun setup() {
+    fun setup(): Unit = runBlocking {
         File("test").apply { if (exists()) delete() }
-        DatabaseFactory("test").build()
+        DatabaseFactory("test").build().also {
+            DatabaseFactory.createSchema(it)
+        }
     }
 
     @AfterTest
