@@ -29,6 +29,7 @@ class SetWarpCommand(module: CommandManagerModule) : CommandManagerModule by mod
         val message = translation.spawnSet
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

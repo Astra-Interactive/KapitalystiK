@@ -28,6 +28,7 @@ class KickCommand(module: CommandManagerModule) : CommandManagerModule by module
         val message = translation.userKicked(memberDTO)
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

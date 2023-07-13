@@ -28,6 +28,7 @@ class EditWarpCommand(module: CommandManagerModule) : CommandManagerModule by mo
         val message = translation.spawnPublic(isPublic)
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

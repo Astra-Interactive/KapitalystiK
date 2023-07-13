@@ -27,6 +27,7 @@ class RenameCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val message = translation.clanRenamed(newName)
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

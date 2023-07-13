@@ -1,5 +1,6 @@
 package ru.astrainteractive.kapitalystik
 
+import kotlinx.coroutines.runBlocking
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
@@ -7,6 +8,7 @@ import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.events.GlobalEventListener
 import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
+import ru.astrainteractive.kapitalystic.exposed.api.factories.DatabaseFactory
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 
 /**
@@ -23,8 +25,10 @@ class KapitalystiK : JavaPlugin() {
      */
     @UnsafeApi
     override fun onEnable() {
-        SpigotRootModule.database.value
-        SpigotRootModule.commandManager
+        runBlocking {
+            DatabaseFactory.createSchema(SpigotRootModule.database.value)
+        }
+        SpigotRootModule.commandManager.build()
         GlobalEventListener.onEnable(this)
         GlobalInventoryClickEvent.onEnable(this)
     }

@@ -1,5 +1,6 @@
 package ru.astrainteractive.kapitalystik.di
 
+import ru.astrainteractive.astralibs.Factory
 import ru.astrainteractive.astralibs.Lateinit
 import ru.astrainteractive.astralibs.Module
 import ru.astrainteractive.astralibs.Reloadable
@@ -45,13 +46,13 @@ object SpigotRootModule : Module {
         val plugin by plugin
         SpigotTranslation(plugin)
     }
-    val commandManager = Single {
-        val plugin by plugin
+    val commandManager = Factory {
         CommandManager(CommandManagerModuleImpl())
     }
     val database = Single {
         val plugin by plugin
         val dbFile = File(plugin.dataFolder, "kapitalystic.db")
+        if (!dbFile.exists()) dbFile.parentFile.mkdirs()
         DatabaseFactory(dbFile.path).build()
     }
     val kapitalystiKCommonApi = Single {

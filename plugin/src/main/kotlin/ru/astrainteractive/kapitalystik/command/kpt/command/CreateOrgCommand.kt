@@ -28,6 +28,7 @@ class CreateOrgCommand(module: CommandManagerModule) : CommandManagerModule by m
         val message = translation.clanCreated(name = name, tag = tag)
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

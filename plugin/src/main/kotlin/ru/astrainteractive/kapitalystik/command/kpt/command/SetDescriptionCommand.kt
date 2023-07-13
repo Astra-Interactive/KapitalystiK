@@ -26,6 +26,7 @@ class SetDescriptionCommand(module: CommandManagerModule) : CommandManagerModule
         val message = translation.ruleAdded
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

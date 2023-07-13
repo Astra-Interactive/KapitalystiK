@@ -29,6 +29,7 @@ class GetOrgListCommand(module: CommandManagerModule) : CommandManagerModule by 
                 .append(Component.text("Leader: ${it.leader.minecraftName}"))
         }
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

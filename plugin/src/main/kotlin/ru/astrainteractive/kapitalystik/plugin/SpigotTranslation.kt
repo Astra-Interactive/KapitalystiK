@@ -15,10 +15,7 @@ class SpigotTranslation(plugin: KapitalystiK) : BaseTranslation(), Translation {
     /**
      * This is a default translation file. Don't forget to create translation.yml in resources of the plugin
      */
-    protected override val translationFile: SpigotFileManager = DefaultSpigotFileManager(
-        plugin = plugin,
-        name = "translations.yml"
-    )
+    protected override val translationFile: SpigotFileManager = DefaultSpigotFileManager(plugin, "translations.yml")
     override val prefix = "#18dbd1[KapitalystiK]".hex()
 
     private val positiveColor = "#42f596"

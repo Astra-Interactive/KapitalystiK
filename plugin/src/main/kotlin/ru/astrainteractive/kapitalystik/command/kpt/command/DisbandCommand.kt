@@ -24,6 +24,7 @@ class DisbandCommand(module: CommandManagerModule) : CommandManagerModule by mod
         val message = translation.disbanded
         playerSender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         playerSender.sendMessage(message)
     }

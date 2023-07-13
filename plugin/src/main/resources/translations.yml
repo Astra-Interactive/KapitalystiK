@@ -1,0 +1,27 @@
+general:
+  wrong_usage: '#db2c18Неверное использование'
+  reload: '#42f596Перезагрузка плагина'
+  reload_complete: '#42f596Перезагрузка успешно завершена'
+  no_permission: '#db2c18У вас нет прав!'
+org:
+  disbanded: '#db2c18Организация распущена!'
+  bio_changed: '#42f596BIO изменено!'
+  rules:
+    added: '#42f596Правило добавлено!'
+  spawn_set: '#42f596Спавн установлен!'
+  error:
+    already_in_org: '#db2c18Ошибка: Уже в организации!'
+    already_invited: '#db2c18Ошибка: Уже приглашен!'
+    not_invited: '#db2c18Ошибка: Не приглашен!'
+    not_player: '#db2c18Ошибка: Не игрок!'
+    not_owner: '#db2c18Ошибка: Не владелец организации!'
+    unexpected: '#db2c18Ошибка: Неизвестная ошибка!'
+    not_enough_money: '#db2c18Недостаточно средств. Нужно %amount%'
+  command:
+    created: '#42f596Клан %name% %tag% был создан!'
+    renamed: '#42f596Новое название: %name%'
+    invited: '#42f596Пользователь %name% приглашен'
+    kicked: '#db2c18Пользователь %name% исключен'
+    transfered: '#db2c18Пользователь %name% новый владелец вашей организации'
+    joined: '#db2c18Вы присоединились к клану %tag%'
+    spawnpublic: '#db2c18Спавн вашей организации теперь публичный: %value%'

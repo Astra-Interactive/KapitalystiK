@@ -3,6 +3,7 @@ import ru.astrainteractive.gradleplugin.setupSpigotShadow
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 dependencies {
@@ -29,5 +30,13 @@ dependencies {
     implementation(projects.modules.services.api)
 }
 
-setupSpigotShadow()
+setupSpigotShadow(
+    destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
+) {
+    relocators = emptyList()
+    minimize {
+        exclude(dependency("org.jetbrains.exposed:exposed-jdbc:${libs.versions.exposed.get()}"))
+        exclude(dependency("org.jetbrains.exposed:exposed-dao:${libs.versions.exposed.get()}"))
+    }
+}
 setupSpigotProcessor()

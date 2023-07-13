@@ -27,6 +27,7 @@ class AcceptCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val message = translation.joinedToClan(clanTAG)
         sender.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         sender.sendMessage(message)
     }

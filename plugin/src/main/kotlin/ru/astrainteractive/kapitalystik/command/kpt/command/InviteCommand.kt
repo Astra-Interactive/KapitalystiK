@@ -28,6 +28,7 @@ class InviteCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val message = translation.userInvited(user.toUserDTO())
         initiator.sendMessage(message)
     }.onFailure {
+        it.printStackTrace()
         val message = failureMessenger.asTranslationMessage(it)
         initiator.sendMessage(message)
     }
