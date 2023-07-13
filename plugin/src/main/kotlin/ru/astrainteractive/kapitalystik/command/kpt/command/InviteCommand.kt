@@ -31,7 +31,8 @@ class InviteCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.inviteToClan(
+            val controller = clanManagementControllers.inviteController.build()
+            controller.inviteToClan(
                 userDTO = player,
                 initiatorDTO = sender.toUserDTO(),
             )

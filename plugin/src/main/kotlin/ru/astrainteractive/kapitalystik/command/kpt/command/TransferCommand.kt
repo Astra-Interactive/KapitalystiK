@@ -31,7 +31,8 @@ class TransferCommand(module: CommandManagerModule) : CommandManagerModule by mo
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.transferOwnership(
+            val controller = clanManagementControllers.transferController.build()
+            controller.transferOwnership(
                 userDTO = memberDTO,
                 initiatorDTO = sender.toUserDTO(),
             )

@@ -20,7 +20,8 @@ class DisbandCommand(module: CommandManagerModule) : CommandManagerModule by mod
         val playerSender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.disband(
+            val controller = clanManagementControllers.disbandController.build()
+            controller.disband(
                 userDTO = playerSender.toUserDTO(),
             )
         }

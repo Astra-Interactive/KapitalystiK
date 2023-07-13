@@ -24,7 +24,8 @@ class CreateOrgCommand(module: CommandManagerModule) : CommandManagerModule by m
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.createClan(
+            val controller = clanManagementControllers.createClanController.build()
+            controller.createClan(
                 userDTO = sender.toUserDTO(),
                 tag = tag,
                 name = name

@@ -23,7 +23,8 @@ class SetBioCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.setStatus(
+            val controller = clanManagementControllers.setStatusController.build()
+            controller.setStatus(
                 userDTO = sender.toUserDTO(),
                 status = bio,
             )

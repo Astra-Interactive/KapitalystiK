@@ -24,7 +24,8 @@ class RenameCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.renameClan(
+            val controller = clanManagementControllers.renameController.build()
+            controller.renameClan(
                 userDTO = sender.toUserDTO(),
                 newName = newName,
             )

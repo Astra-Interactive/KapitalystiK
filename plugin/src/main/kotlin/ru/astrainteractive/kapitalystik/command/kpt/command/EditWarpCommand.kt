@@ -25,7 +25,8 @@ class EditWarpCommand(module: CommandManagerModule) : CommandManagerModule by mo
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.makeWarpPublic(
+            val controller = clanManagementControllers.makeWarpPublicController.build()
+            controller.makeWarpPublic(
                 userDTO = sender.toUserDTO(),
                 isPublic = isPublic,
                 warpTAG = tag

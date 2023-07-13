@@ -23,7 +23,8 @@ class AcceptCommand(module: CommandManagerModule) : CommandManagerModule by modu
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.acceptClanInvite(
+            val controller = clanManagementControllers.acceptInviteControllerFactory.build()
+            controller.acceptClanInvite(
                 userDTO = sender.toUserDTO(),
                 clanTAG = clanTAG,
             )

@@ -23,7 +23,8 @@ class SetDescriptionCommand(module: CommandManagerModule) : CommandManagerModule
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.setDescription(
+            val controller = clanManagementControllers.setDescriptionController.build()
+            controller.setDescription(
                 userDTO = sender.toUserDTO(),
                 description = description,
             )

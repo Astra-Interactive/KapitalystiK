@@ -28,7 +28,8 @@ class SetWarpCommand(module: CommandManagerModule) : CommandManagerModule by mod
         )
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.setWarp(
+            val controller = clanManagementControllers.setWarpController.build()
+            controller.setWarp(
                 userDTO = sender.toUserDTO(),
                 locationDTO = locationDTO,
                 tag = tag

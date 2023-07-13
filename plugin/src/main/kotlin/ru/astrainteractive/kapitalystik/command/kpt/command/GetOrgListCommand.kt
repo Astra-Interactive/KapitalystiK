@@ -19,7 +19,8 @@ class GetOrgListCommand(module: CommandManagerModule) : CommandManagerModule by 
         val page = argument(1) { it?.toIntOrNull() }.validateUsage(sender, translation) ?: return
         val sender = sender.validatePlayer(translation) ?: return
         scope.launch(dispatchers.IO) {
-            clanManagementController.getPagedOrgs(page, sender.toUserDTO()).onSuccess {
+            val controller = clanManagementControllers.getPagedOrgsController.build()
+            controller.getPagedOrgs(page, sender.toUserDTO()).onSuccess {
                 it.forEach {
                     Component
                         .text(it.name)

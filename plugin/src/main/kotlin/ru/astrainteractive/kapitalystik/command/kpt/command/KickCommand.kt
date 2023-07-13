@@ -31,7 +31,8 @@ class KickCommand(module: CommandManagerModule) : CommandManagerModule by module
         val sender = sender.validatePlayer(translation) ?: return
 
         scope.launch(dispatchers.IO) {
-            clanManagementController.kickFromClan(
+            val controller = clanManagementControllers.kickController.build()
+            controller.kickFromClan(
                 userDTO = memberDTO,
                 initiatorDTO = sender.toUserDTO(),
             )
