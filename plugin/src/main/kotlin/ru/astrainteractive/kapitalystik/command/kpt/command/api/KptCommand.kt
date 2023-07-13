@@ -5,5 +5,6 @@ import ru.astrainteractive.astralibs.commands.Command
 interface KptCommand {
     val alias: String
     fun Command.call()
-    fun call(command: Command) = command.call()
+
+    fun callWithCommand(command: Command) = command.call()
 }

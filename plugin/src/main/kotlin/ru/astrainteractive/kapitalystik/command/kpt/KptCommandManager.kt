@@ -39,6 +39,6 @@ class KptCommandManager(
     fun register() = plugin.registerCommand("kpt") {
         val alias = args.getOrNull(0) ?: return@registerCommand
         val command = commands.firstOrNull { it.alias == alias } ?: return@registerCommand
-        command.call(this)
+        command.callWithCommand(this)
     }
 }
