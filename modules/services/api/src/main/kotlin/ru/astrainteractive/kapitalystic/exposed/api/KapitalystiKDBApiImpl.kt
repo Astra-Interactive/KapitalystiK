@@ -49,23 +49,25 @@ internal class KapitalystiKDBApiImpl(
         tag: String,
         name: String,
         executorDTO: UserDTO
-    ): OrganizationDTO {
-        if (dbCommon.isMember(executorDTO)) throw DBException.AlreadyInOrganization
-        return transaction {
-            val orgDAO = OrgDAO.new org@{
-                this.tag = tag
-                this.name = name
-                this.description = ""
-                this.status = ""
-            }
-            MemberDAO.new {
-                this.minecraftUUID = executorDTO.minecraftUUID.toString()
-                this.minecraftName = executorDTO.minecraftName
-                this.orgID = orgDAO.id
-                this.isOwner = true
-            }
-            OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
+    ): OrganizationDTO = transaction {
+        if (MemberDAO.find(MemberTable.minecraftUUID eq executorDTO.minecraftUUID.toString()).firstOrNull() != null) {
+            throw DBException.AlreadyInOrganization
         }
+        if (OrgDAO.find(OrgTable.tag eq tag).firstOrNull() != null) throw DBException.OrgAlreadyExists
+        if (OrgDAO.find(OrgTable.name eq name).firstOrNull() != null) throw DBException.OrgAlreadyExists
+        val orgDAO = OrgDAO.new org@{
+            this.tag = tag
+            this.name = name
+            this.description = ""
+            this.status = ""
+        }
+        MemberDAO.new {
+            this.minecraftUUID = executorDTO.minecraftUUID.toString()
+            this.minecraftName = executorDTO.minecraftName
+            this.orgID = orgDAO.id
+            this.isOwner = true
+        }
+        OrgDAO.findById(orgDAO.id)?.let(orgMapper::toDTO) ?: throw DBException.UnexpectedException
     }
 
     override suspend fun setStatus(

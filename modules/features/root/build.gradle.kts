@@ -19,6 +19,7 @@ dependencies {
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
+    testImplementation("com.h2database:h2:1.4.197")
     // Local
     implementation(projects.modules.services.dto)
     implementation(projects.modules.services.api)

@@ -14,6 +14,7 @@ internal class FailureMessengerComponent(
         is DBException.NotOrganizationOwner -> translation.notOrganizationOwner
         is DBException.UnexpectedException -> translation.unexcpectedException
         is DBException.NotEnoughMoney -> translation.notEnoughMoney(e.required.toInt())
+        DBException.OrgAlreadyExists -> translation.wrongUsage // todo
     }
 
     override fun asTranslationMessage(e: Throwable): String {

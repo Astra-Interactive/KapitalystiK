@@ -15,10 +15,13 @@ import ru.astrainteractive.kapitalystic.exposed.api.enitites.warps.WarpsTable
 import java.sql.Connection
 
 class DatabaseFactory(
-    val path: String
+    val path: String?
 ) : Factory<Database> {
     override fun build(): Database {
-        return Database.connect("jdbc:sqlite:$path", "org.sqlite.JDBC").also {
+        val database = path?.let {
+            Database.connect("jdbc:sqlite:$path", "org.sqlite.JDBC")
+        } ?: Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        return database.also {
             TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
             runBlocking {
                 transaction(it) {

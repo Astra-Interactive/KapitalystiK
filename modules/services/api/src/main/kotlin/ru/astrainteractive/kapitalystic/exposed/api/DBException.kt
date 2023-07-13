@@ -1,6 +1,8 @@
 package ru.astrainteractive.kapitalystic.exposed.api
 
 sealed class DBException : Throwable() {
+    data object OrgAlreadyExists : DBException()
+
     /**
      * User is not a member of organization
      */
@@ -30,5 +32,6 @@ sealed class DBException : Throwable() {
      * Unresolved exception has happened
      */
     data object UnexpectedException : DBException()
+
     class NotEnoughMoney(val required: Number) : DBException()
 }
