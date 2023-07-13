@@ -9,14 +9,24 @@ import ru.astrainteractive.kapitalystic.features.controllers.di.TestClanManageme
 import ru.astrainteractive.kapitalystic.features.core.Configuration
 import java.io.File
 import java.util.UUID
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.assertFailsWith
 
 class CreateClanControllerTest {
-    @Test
-    fun test(): Unit = runBlocking {
+    @BeforeTest
+    fun setup() {
         File("test").apply { if (exists()) delete() }
         DatabaseFactory("test").build()
+    }
 
+    @AfterTest
+    fun destroy() {
+        File("test").apply { if (exists()) delete() }
+    }
+
+    @Test
+    fun test(): Unit = runBlocking {
         val createCost = 100
         val module = TestClanManagementControllerModule(
             configuration = Configuration(
