@@ -13,7 +13,7 @@ import ru.astrainteractive.kapitalystic.features.failuremessenger.FailureMesseng
 import ru.astrainteractive.kapitalystic.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 
-class ClanManagementControllerModule : ClanManagementControllerModule {
+class ClanManagementControllerModuleImpl : ClanManagementControllerModule {
     private val rootModule by SpigotRootModule
     override val platformMessenger: PlatformMessenger by rootModule.platformMessenger
     override val dbApi: KapitalystiKDBApi by rootModule.kapitalystiKApi
@@ -21,8 +21,8 @@ class ClanManagementControllerModule : ClanManagementControllerModule {
     override val configuration: Configuration by rootModule.configuration
     override val translation: Translation by rootModule.translation
     override val balanceValidation: BalanceValidation
-        get() = BalanceValidation(BalanceValidationModuleModule())
+        get() = BalanceValidation(BalanceValidationModuleModuleImpl())
     override val failureMessenger: FailureMessenger
-        get() = FailureMessenger(FailureMessengerModule())
+        get() = FailureMessenger(FailureMessengerModuleImpl())
     override val messenger: PlatformMessenger by rootModule.platformMessenger
 }

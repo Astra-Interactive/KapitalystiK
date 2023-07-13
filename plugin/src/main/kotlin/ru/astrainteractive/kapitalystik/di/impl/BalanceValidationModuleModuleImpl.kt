@@ -8,7 +8,7 @@ import ru.astrainteractive.kapitalystic.features.core.Translation
 import ru.astrainteractive.kapitalystic.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 
-class BalanceValidationModuleModule : BalanceValidationModule {
+class BalanceValidationModuleModuleImpl : BalanceValidationModule {
     private val rootModule by SpigotRootModule
     override val configuration: Configuration by rootModule.configuration
     override val economyProvider: EconomyProvider by rootModule.economyProvider

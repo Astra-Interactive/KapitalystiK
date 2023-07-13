@@ -19,7 +19,7 @@ import ru.astrainteractive.kapitalystic.features.core.Configuration
 import ru.astrainteractive.kapitalystic.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.command.CommandManager
-import ru.astrainteractive.kapitalystik.di.impl.ClanManagementControllerModule
+import ru.astrainteractive.kapitalystik.di.impl.ClanManagementControllerModuleImpl
 import ru.astrainteractive.kapitalystik.di.impl.CommandManagerModuleImpl
 import ru.astrainteractive.kapitalystik.plugin.SpigotTranslation
 import ru.astrainteractive.kapitalystik.util.DefaultAsyncComponent
@@ -70,6 +70,6 @@ object SpigotRootModule : Module {
         VaultEconomyProvider()
     }
     val clanManagementController = Single {
-        ClanManagementController(ClanManagementControllerModule())
+        ClanManagementController(ClanManagementControllerModuleImpl())
     }
 }
