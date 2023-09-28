@@ -2,7 +2,7 @@
 
 package ru.astrainteractive.kapitalystik.command.kpt
 
-import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.AcceptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.command.CreateOrgCommand

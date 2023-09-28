@@ -3,7 +3,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.astralibs.command.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
@@ -17,7 +17,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class InviteCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "rename"
-    val controller = clanManagementControllers.inviteController.build()
+    val controller = clanManagementControllers.inviteController.create()
 
     private suspend fun execute(user: Player, initiator: Player) = runCatching {
         controller.inviteToClan(

@@ -1,11 +1,10 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
-import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.kapitalystic.features.core.Translation
 import ru.astrainteractive.kapitalystic.features.failuremessenger.di.FailureMessengerModule
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
+import ru.astrainteractive.klibs.kdi.getValue
 
-class FailureMessengerModuleImpl : FailureMessengerModule {
-    private val rootModule by SpigotRootModule
+class FailureMessengerModuleImpl(rootModule: SpigotRootModule) : FailureMessengerModule {
     override val translation: Translation by rootModule.translation
 }

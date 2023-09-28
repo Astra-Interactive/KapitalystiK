@@ -23,15 +23,15 @@ abstract class ORMTest {
     }
 
     val commonApi by lazy {
-        KapitalystiKCommonDBApiFactory().build()
+        KapitalystiKCommonDBApiFactory().create()
     }
     val api by lazy {
-        KapitalystiKDBApiFactory(commonApi).build()
+        KapitalystiKDBApiFactory(commonApi).create()
     }
 
     @BeforeTest
     open fun setup(): Unit = runBlocking {
-        database = MockDatabaseFactory.build()
+        database = MockDatabaseFactory.create()
     }
 
     @AfterTest

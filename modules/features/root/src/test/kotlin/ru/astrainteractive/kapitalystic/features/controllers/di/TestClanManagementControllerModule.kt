@@ -15,8 +15,8 @@ class TestClanManagementControllerModule(
     override val economyProvider: EconomyProvider = InMemoryEconomyProvider(),
     override val configuration: Configuration = Configuration()
 ) : ClanManagementControllerModule {
-    private val commonDBApi: KapitalystiKCommonDBApi = KapitalystiKCommonDBApiFactory().build()
-    override val dbApi: KapitalystiKDBApi = KapitalystiKDBApiFactory(commonDBApi).build()
+    private val commonDBApi: KapitalystiKCommonDBApi = KapitalystiKCommonDBApiFactory().create()
+    override val dbApi: KapitalystiKDBApi = KapitalystiKDBApiFactory(commonDBApi).create()
     private val balanceValidationModule = object : BalanceValidationModule {
         override val isEconomyEnabled: Boolean = this@TestClanManagementControllerModule.isEconomyEnabled
         override val economyProvider: EconomyProvider = this@TestClanManagementControllerModule.economyProvider

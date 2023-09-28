@@ -4,7 +4,7 @@ import kotlinx.coroutines.launch
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.astralibs.command.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePlayer
@@ -15,7 +15,7 @@ import ru.astrainteractive.kapitalystik.command.kpt.util.validateUsage
  */
 class GetOrgListCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "list"
-    val controller = clanManagementControllers.getPagedOrgsController.build()
+    val controller = clanManagementControllers.getPagedOrgsController.create()
     private suspend fun execute(page: Int, sender: Player) = runCatching {
         controller.getPagedOrgs(page)
     }.onSuccess {

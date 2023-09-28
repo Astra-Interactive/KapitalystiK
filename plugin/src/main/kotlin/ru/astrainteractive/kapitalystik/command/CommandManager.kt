@@ -5,9 +5,9 @@ import ru.astrainteractive.kapitalystik.command.kpt.KptCommandManager
 
 class CommandManager(
     module: CommandManagerModule
-) {
+) : CommandManagerModule by module {
     init {
-        reload(module)
+        reload()
         KptCommandManager(module).register()
     }
 }

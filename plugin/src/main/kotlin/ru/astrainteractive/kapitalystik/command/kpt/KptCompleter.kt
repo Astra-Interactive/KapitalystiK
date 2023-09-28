@@ -2,8 +2,8 @@ package ru.astrainteractive.kapitalystik.command.kpt
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.registerTabCompleter
-import ru.astrainteractive.astralibs.utils.withEntry
+import ru.astrainteractive.astralibs.command.registerTabCompleter
+import ru.astrainteractive.astralibs.util.withEntry
 
 object KptCompleter {
     fun KptCommandManager.completer() = plugin.registerTabCompleter("kpt") {

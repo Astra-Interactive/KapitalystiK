@@ -1,6 +1,5 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
-import ru.astrainteractive.astralibs.Factory
 import ru.astrainteractive.kapitalystic.features.controllers.AcceptInviteController
 import ru.astrainteractive.kapitalystic.features.controllers.CreateClanController
 import ru.astrainteractive.kapitalystic.features.controllers.DisbandController
@@ -14,6 +13,7 @@ import ru.astrainteractive.kapitalystic.features.controllers.SetStatusController
 import ru.astrainteractive.kapitalystic.features.controllers.SetWarpController
 import ru.astrainteractive.kapitalystic.features.controllers.TransferController
 import ru.astrainteractive.kapitalystic.features.controllers.di.ClanManagementControllerModule
+import ru.astrainteractive.klibs.kdi.Factory
 
 class ClanManagementControllers(module: ClanManagementControllerModule) {
     val acceptInviteControllerFactory = Factory {

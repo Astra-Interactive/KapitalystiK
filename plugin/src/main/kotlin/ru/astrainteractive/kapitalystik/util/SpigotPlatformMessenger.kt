@@ -1,7 +1,7 @@
 package ru.astrainteractive.kapitalystik.util
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.features.platformmessenger.PlatformMessenger
 

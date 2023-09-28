@@ -4,7 +4,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.util
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.Argument
+import ru.astrainteractive.astralibs.command.ArgumentResult
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.features.core.Translation
 import ru.astrainteractive.kapitalystik.plugin.Permissions
@@ -20,7 +20,7 @@ fun Player.toUserDTO() = UserDTO(
 /**
  * Validates usage of argument and sends a message to player about wrong usage
  */
-fun <T> Argument<T>.validateUsage(sender: CommandSender, translation: Translation): T? {
+fun <T> ArgumentResult<T>.validateUsage(sender: CommandSender, translation: Translation): T? {
     onFailure {
         sender.sendMessage(translation.wrongUsage)
         return null

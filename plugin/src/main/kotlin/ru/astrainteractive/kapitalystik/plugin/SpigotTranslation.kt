@@ -2,8 +2,8 @@ package ru.astrainteractive.kapitalystik.plugin
 
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
-import ru.astrainteractive.astralibs.utils.BaseTranslation
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.util.BaseTranslation
+import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystic.features.core.Translation
 import ru.astrainteractive.kapitalystik.KapitalystiK

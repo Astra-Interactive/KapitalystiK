@@ -1,6 +1,6 @@
 package ru.astrainteractive.kapitalystik.command.kpt.command.api
 
-import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.astralibs.command.Command
 
 interface KptCommand {
     val alias: String

@@ -3,7 +3,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.astralibs.command.Command
 import ru.astrainteractive.kapitalystic.dto.UserDTO
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
@@ -18,7 +18,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class KickCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "kick"
-    val controller = clanManagementControllers.kickController.build()
+    val controller = clanManagementControllers.kickController.create()
     private suspend fun execute(memberDTO: UserDTO, sender: Player) = runCatching {
         controller.kickFromClan(
             userDTO = memberDTO,

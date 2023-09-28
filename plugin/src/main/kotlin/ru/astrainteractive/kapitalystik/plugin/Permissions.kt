@@ -1,6 +1,6 @@
 package ru.astrainteractive.kapitalystik.plugin
 
-import ru.astrainteractive.astralibs.utils.Permission
+import ru.astrainteractive.astralibs.util.Permission
 
 sealed class Permissions(override val value: String) : Permission {
     /**

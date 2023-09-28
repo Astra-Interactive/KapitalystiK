@@ -18,7 +18,7 @@ minecraft-protocollib = "4.8.0"
 minecraft-wg = "7.0.7"
 minecraft-vault = "1.7"
 minecraft-coreprotect = "21.2"
-minecraft-astralibs = "2.7.5"
+minecraft-astralibs = "2.11.0"
 minecraft-bstats = "3.0.0"
 minecraft-mockbukkit = "v1.19-SNAPSHOT"
 
@@ -73,6 +73,8 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 
+# klibs
+klibs-kdi = { module = "ru.astrainteractive.klibs:kdi", version.strictly = "1.1.0" }
 
 # Minecraft
 minecraft-paper-api = { module = "io.papermc.paper:paper-api", version.ref = "minecraft-spigot" }
@@ -87,7 +89,6 @@ minecraft-mockbukkit = { module = "com.github.MockBukkit:MockBukkit", version.re
 
 # AstraLibs
 minecraft-astralibs-ktxcore = { module = "ru.astrainteractive.astralibs:ktx-core", version.ref = "minecraft-astralibs" }
-minecraft-astralibs-di = { module = "ru.astrainteractive.astralibs:di", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-orm = { module = "ru.astrainteractive.astralibs:orm", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-spigot-core = { module = "ru.astrainteractive.astralibs:spigot-core", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-spigot-gui = { module = "ru.astrainteractive.astralibs:spigot-gui", version.ref = "minecraft-astralibs" }

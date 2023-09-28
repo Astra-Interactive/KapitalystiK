@@ -17,7 +17,7 @@ class CreateClanControllerTest {
     @BeforeTest
     fun setup(): Unit = runBlocking {
         File("test").apply { if (exists()) delete() }
-        DatabaseFactory("test").build().also {
+        DatabaseFactory("test").create().also {
             DatabaseFactory.createSchema(it)
         }
     }

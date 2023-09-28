@@ -5,8 +5,7 @@ import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.events.GlobalEventListener
-import ru.astrainteractive.astralibs.getValue
+import ru.astrainteractive.astralibs.event.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
 import ru.astrainteractive.kapitalystic.exposed.api.factories.DatabaseFactory
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
@@ -15,9 +14,10 @@ import ru.astrainteractive.kapitalystik.di.SpigotRootModule
  * Initial class for your plugin
  */
 class KapitalystiK : JavaPlugin() {
+    private val rootModule = SpigotRootModule()
 
     init {
-        SpigotRootModule.plugin.initialize(this)
+        rootModule.plugin.initialize(this)
     }
 
     /**
@@ -26,9 +26,9 @@ class KapitalystiK : JavaPlugin() {
     @UnsafeApi
     override fun onEnable() {
         runBlocking {
-            DatabaseFactory.createSchema(SpigotRootModule.database.value)
+            DatabaseFactory.createSchema(rootModule.database.value)
         }
-        SpigotRootModule.commandManager.build()
+        rootModule.commandManager.create()
         GlobalEventListener.onEnable(this)
         GlobalInventoryClickEvent.onEnable(this)
     }
@@ -48,7 +48,7 @@ class KapitalystiK : JavaPlugin() {
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-        SpigotRootModule.configuration.reload()
-        SpigotRootModule.translation.reload()
+        rootModule.configuration.reload()
+        rootModule.translation.reload()
     }
 }

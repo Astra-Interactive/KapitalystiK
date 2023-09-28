@@ -6,17 +6,17 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.astrainteractive.astralibs.Factory
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.invitation.InvitationTable
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.member.MemberTable
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.org.OrgTable
 import ru.astrainteractive.kapitalystic.exposed.api.enitites.warps.WarpsTable
+import ru.astrainteractive.klibs.kdi.Factory
 import java.sql.Connection
 
 class DatabaseFactory(
     val path: String?
 ) : Factory<Database> {
-    override fun build(): Database {
+    override fun create(): Database {
         val database = path?.let {
             Database.connect("jdbc:sqlite:$path", "org.sqlite.JDBC")
         } ?: Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")

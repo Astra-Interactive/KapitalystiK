@@ -2,7 +2,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.commands.Command
+import ru.astrainteractive.astralibs.command.Command
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
@@ -16,7 +16,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
  */
 class CreateOrgCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
     override val alias: String = "create"
-    val controller = clanManagementControllers.createClanController.build()
+    val controller = clanManagementControllers.createClanController.create()
 
     private suspend fun execute(sender: Player, tag: String, name: String) = runCatching {
         controller.createClan(
