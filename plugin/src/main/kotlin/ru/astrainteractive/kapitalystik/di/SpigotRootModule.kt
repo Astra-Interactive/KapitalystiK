@@ -5,16 +5,15 @@ import ru.astrainteractive.astralibs.configloader.ConfigLoader
 import ru.astrainteractive.astralibs.economy.AnyEconomyProvider
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.kapitalystik.exposed.api.factories.DatabaseFactory
-import ru.astrainteractive.kapitalystik.exposed.api.factories.KapitalystiKCommonDBApiFactory
-import ru.astrainteractive.kapitalystik.exposed.api.factories.KapitalystiKDBApiFactory
-import ru.astrainteractive.kapitalystik.features.core.Configuration
-import ru.astrainteractive.kapitalystik.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.KapitalystiK
+import ru.astrainteractive.kapitalystik.api.di.factory.KapitalystiKCommonDBApiFactory
+import ru.astrainteractive.kapitalystik.api.di.factory.KapitalystiKDBApiFactory
 import ru.astrainteractive.kapitalystik.command.CommandManager
-import ru.astrainteractive.kapitalystik.di.impl.CommandManagerModuleImpl
+import ru.astrainteractive.kapitalystik.core.Configuration
+import ru.astrainteractive.kapitalystik.database.di.factory.DatabaseFactory
+import ru.astrainteractive.kapitalystik.di.impl.CommandManagerContainerImpl
+import ru.astrainteractive.kapitalystik.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.plugin.SpigotTranslation
-import ru.astrainteractive.kapitalystik.util.DefaultAsyncComponent
 import ru.astrainteractive.kapitalystik.util.SpigotPlatformMessenger
 import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Lateinit
@@ -32,7 +31,7 @@ class SpigotRootModule : Module {
     }
 
     val scope = Single<AsyncComponent> {
-        DefaultAsyncComponent()
+        AsyncComponent.Default()
     }
     val configuration = Reloadable {
         val plugin by plugin
@@ -47,7 +46,7 @@ class SpigotRootModule : Module {
         SpigotTranslation(plugin)
     }
     val commandManager = Factory {
-        CommandManager(CommandManagerModuleImpl(this))
+        CommandManager(CommandManagerContainerImpl(this))
     }
     val database = Single {
         val plugin by plugin

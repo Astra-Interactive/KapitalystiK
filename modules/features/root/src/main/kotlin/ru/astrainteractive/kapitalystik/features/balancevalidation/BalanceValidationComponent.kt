@@ -1,15 +1,15 @@
 package ru.astrainteractive.kapitalystik.features.balancevalidation
 
+import ru.astrainteractive.kapitalystik.api.exception.DBApiException
 import ru.astrainteractive.kapitalystik.dto.UserDTO
-import ru.astrainteractive.kapitalystik.exposed.api.DBException
-import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationModule
+import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationContainer
 
 /**
  * This class will help to reduce boilerplate code in some places
  */
 internal class BalanceValidationComponent(
-    module: BalanceValidationModule
-) : BalanceValidation, BalanceValidationModule by module {
+    container: BalanceValidationContainer
+) : BalanceValidation, BalanceValidationContainer by container {
 
     override fun haveAtLeast(userDTO: UserDTO, requiredAmount: Number): Boolean {
         if (!isEconomyEnabled) return true
@@ -20,6 +20,6 @@ internal class BalanceValidationComponent(
     }
 
     override fun assertHaveAtLeast(userDTO: UserDTO, requiredAmount: Number) {
-        if (!haveAtLeast(userDTO, requiredAmount)) throw DBException.NotEnoughMoney(requiredAmount)
+        if (!haveAtLeast(userDTO, requiredAmount)) throw DBApiException.NotEnoughMoney(requiredAmount)
     }
 }

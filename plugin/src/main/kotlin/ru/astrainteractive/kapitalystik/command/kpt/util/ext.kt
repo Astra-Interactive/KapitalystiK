@@ -5,8 +5,8 @@ package ru.astrainteractive.kapitalystik.command.kpt.util
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.ArgumentResult
+import ru.astrainteractive.kapitalystik.core.Translation
 import ru.astrainteractive.kapitalystik.dto.UserDTO
-import ru.astrainteractive.kapitalystik.features.core.Translation
 import ru.astrainteractive.kapitalystik.plugin.Permissions
 
 /**

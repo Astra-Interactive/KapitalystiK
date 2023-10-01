@@ -1,8 +1,8 @@
 package ru.astrainteractive.kapitalystik.features.balancevalidation
 
+import ru.astrainteractive.kapitalystik.api.exception.DBApiException
 import ru.astrainteractive.kapitalystik.dto.UserDTO
-import ru.astrainteractive.kapitalystik.exposed.api.DBException
-import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationModule
+import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationContainer
 
 interface BalanceValidation {
     /**
@@ -13,11 +13,13 @@ interface BalanceValidation {
 
     /**
      * Check player balance
-     * @throws [DBException.NotEnoughMoney] if not enough money
+     * @throws [DBApiException.NotEnoughMoney] if not enough money
      */
     fun assertHaveAtLeast(userDTO: UserDTO, requiredAmount: Number)
 
     companion object {
-        fun BalanceValidation(module: BalanceValidationModule): BalanceValidation = BalanceValidationComponent(module)
+        fun BalanceValidation(module: BalanceValidationContainer): BalanceValidation = BalanceValidationComponent(
+            module
+        )
     }
 }

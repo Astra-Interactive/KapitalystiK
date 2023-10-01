@@ -3,7 +3,7 @@
 package ru.astrainteractive.kapitalystik.command.kpt
 
 import ru.astrainteractive.astralibs.command.registerCommand
-import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
+import ru.astrainteractive.kapitalystik.command.di.CommandManagerContainer
 import ru.astrainteractive.kapitalystik.command.kpt.command.AcceptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.command.CreateOrgCommand
 import ru.astrainteractive.kapitalystik.command.kpt.command.DisbandCommand
@@ -19,8 +19,8 @@ import ru.astrainteractive.kapitalystik.command.kpt.command.TransferCommand
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 
 class KptCommandManager(
-    module: CommandManagerModule
-) : CommandManagerModule by module {
+    module: CommandManagerContainer
+) : CommandManagerContainer by module {
     val commands = buildList<KptCommand> {
         AcceptCommand(module).run(::add)
         CreateOrgCommand(module).run(::add)

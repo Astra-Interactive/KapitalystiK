@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.Command
-import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
+import ru.astrainteractive.kapitalystik.command.di.CommandManagerContainer
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePlayer
 import ru.astrainteractive.kapitalystik.command.kpt.util.validateUsage
@@ -13,7 +13,7 @@ import ru.astrainteractive.kapitalystik.command.kpt.util.validateUsage
 /**
  * /kpt list <page>
  */
-class GetOrgListCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
+class GetOrgListCommand(module: CommandManagerContainer) : CommandManagerContainer by module, KptCommand {
     override val alias: String = "list"
     val controller = clanManagementControllers.getPagedOrgsController.create()
     private suspend fun execute(page: Int, sender: Player) = runCatching {

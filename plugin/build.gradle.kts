@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.modules.features.root)
     implementation(projects.modules.services.dto)
     implementation(projects.modules.services.api)
+    implementation(projects.modules.services.database)
 }
 
 setupSpigotShadow(

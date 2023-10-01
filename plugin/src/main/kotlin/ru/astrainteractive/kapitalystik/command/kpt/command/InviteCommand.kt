@@ -4,7 +4,7 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.Command
-import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
+import ru.astrainteractive.kapitalystik.command.di.CommandManagerContainer
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePermission
@@ -15,7 +15,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
 /**
  * /kpt rename <name>
  */
-class InviteCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
+class InviteCommand(module: CommandManagerContainer) : CommandManagerContainer by module, KptCommand {
     override val alias: String = "rename"
     val controller = clanManagementControllers.inviteController.create()
 

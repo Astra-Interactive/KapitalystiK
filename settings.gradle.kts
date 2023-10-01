@@ -45,6 +45,7 @@ rootProject.name = "KapitalystiK"
 // Spigot
 include("plugin")
 // Services
+include("modules:services:database")
 include("modules:services:api")
 include("modules:services:dto")
 // Features

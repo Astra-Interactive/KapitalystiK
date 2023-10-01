@@ -3,7 +3,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.Command
-import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
+import ru.astrainteractive.kapitalystik.command.di.CommandManagerContainer
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePermission
@@ -14,7 +14,7 @@ import ru.astrainteractive.kapitalystik.plugin.Permissions
 /**
  * /kpt description <message>
  */
-class SetDescriptionCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
+class SetDescriptionCommand(module: CommandManagerContainer) : CommandManagerContainer by module, KptCommand {
     override val alias: String = "description"
     val controller = clanManagementControllers.setDescriptionController.create()
     private suspend fun execute(sender: Player, description: String) = runCatching {

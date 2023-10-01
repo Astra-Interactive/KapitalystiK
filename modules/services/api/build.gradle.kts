@@ -16,4 +16,5 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.services.dto)
+    implementation(projects.modules.services.database)
 }

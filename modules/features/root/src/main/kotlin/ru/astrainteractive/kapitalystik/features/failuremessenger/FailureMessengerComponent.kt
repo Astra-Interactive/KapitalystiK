@@ -1,23 +1,23 @@
 package ru.astrainteractive.kapitalystik.features.failuremessenger
 
-import ru.astrainteractive.kapitalystik.exposed.api.DBException
-import ru.astrainteractive.kapitalystik.features.failuremessenger.di.FailureMessengerModule
+import ru.astrainteractive.kapitalystik.api.exception.DBApiException
+import ru.astrainteractive.kapitalystik.features.failuremessenger.di.FailureMessengerContainer
 
 internal class FailureMessengerComponent(
-    module: FailureMessengerModule
-) : FailureMessenger, FailureMessengerModule by module {
-    override fun asTranslationMessage(e: DBException): String = when (e) {
-        is DBException.AlreadyInOrganization -> translation.alreadyInOrganization
-        is DBException.AlreadyInvited -> translation.alreadyInvited
-        is DBException.NotInvited -> translation.notInvited
-        is DBException.NotOrganizationMember -> translation.notOrganizationMember
-        is DBException.NotOrganizationOwner -> translation.notOrganizationOwner
-        is DBException.UnexpectedException -> translation.unexcpectedException
-        is DBException.NotEnoughMoney -> translation.notEnoughMoney(e.required.toInt())
-        DBException.OrgAlreadyExists -> translation.wrongUsage // todo
+    container: FailureMessengerContainer
+) : FailureMessenger, FailureMessengerContainer by container {
+    override fun asTranslationMessage(e: DBApiException): String = when (e) {
+        is DBApiException.AlreadyInOrganization -> translation.alreadyInOrganization
+        is DBApiException.AlreadyInvited -> translation.alreadyInvited
+        is DBApiException.NotInvited -> translation.notInvited
+        is DBApiException.NotOrganizationMember -> translation.notOrganizationMember
+        is DBApiException.NotOrganizationOwner -> translation.notOrganizationOwner
+        is DBApiException.UnexpectedException -> translation.unexcpectedException
+        is DBApiException.NotEnoughMoney -> translation.notEnoughMoney(e.required.toInt())
+        DBApiException.OrgAlreadyExists -> translation.wrongUsage // todo
     }
 
     override fun asTranslationMessage(e: Throwable): String {
-        return (e as? DBException)?.let(::asTranslationMessage) ?: translation.unexcpectedException
+        return (e as? DBApiException)?.let(::asTranslationMessage) ?: translation.unexcpectedException
     }
 }

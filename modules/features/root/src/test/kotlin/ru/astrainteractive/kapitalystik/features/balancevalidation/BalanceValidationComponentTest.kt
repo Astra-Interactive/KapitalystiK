@@ -4,7 +4,7 @@ import org.junit.Test
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.economy.InMemoryEconomyProvider
 import ru.astrainteractive.kapitalystik.dto.UserDTO
-import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationModule
+import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationContainer
 import java.util.UUID
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
@@ -14,7 +14,7 @@ class BalanceValidationComponentTest {
     @Test
     fun testEconomyEnabled() {
         val economyProvider = InMemoryEconomyProvider()
-        val balanceValidationComponent = object : BalanceValidationModule {
+        val balanceValidationComponent = object : BalanceValidationContainer {
             override val isEconomyEnabled: Boolean = true
             override val economyProvider: EconomyProvider = economyProvider
         }.let(::BalanceValidationComponent)
@@ -32,7 +32,7 @@ class BalanceValidationComponentTest {
 
     @Test
     fun testEconomyDisabled() {
-        val balanceValidationComponent = object : BalanceValidationModule {
+        val balanceValidationComponent = object : BalanceValidationContainer {
             override val isEconomyEnabled: Boolean = false
             override val economyProvider: EconomyProvider = InMemoryEconomyProvider()
         }.let(::BalanceValidationComponent)

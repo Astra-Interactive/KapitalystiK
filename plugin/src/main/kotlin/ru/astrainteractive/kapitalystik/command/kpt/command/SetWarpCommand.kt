@@ -3,19 +3,19 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.Command
-import ru.astrainteractive.kapitalystik.dto.LocationDTO
-import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
+import ru.astrainteractive.kapitalystik.command.di.CommandManagerContainer
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePermission
 import ru.astrainteractive.kapitalystik.command.kpt.util.validatePlayer
 import ru.astrainteractive.kapitalystik.command.kpt.util.validateUsage
+import ru.astrainteractive.kapitalystik.dto.LocationDTO
 import ru.astrainteractive.kapitalystik.plugin.Permissions
 
 /**
  * /kpt setwarp <tag>
  */
-class SetWarpCommand(module: CommandManagerModule) : CommandManagerModule by module, KptCommand {
+class SetWarpCommand(module: CommandManagerContainer) : CommandManagerContainer by module, KptCommand {
     override val alias: String = "setwarp"
     val controller = clanManagementControllers.setWarpController.create()
 
