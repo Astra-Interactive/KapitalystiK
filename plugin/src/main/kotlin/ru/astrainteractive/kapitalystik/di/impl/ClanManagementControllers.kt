@@ -1,18 +1,18 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
-import ru.astrainteractive.kapitalystic.features.controllers.AcceptInviteController
-import ru.astrainteractive.kapitalystic.features.controllers.CreateClanController
-import ru.astrainteractive.kapitalystic.features.controllers.DisbandController
-import ru.astrainteractive.kapitalystic.features.controllers.GetPagedOrgsController
-import ru.astrainteractive.kapitalystic.features.controllers.InviteController
-import ru.astrainteractive.kapitalystic.features.controllers.KickController
-import ru.astrainteractive.kapitalystic.features.controllers.MakeWarpPublicController
-import ru.astrainteractive.kapitalystic.features.controllers.RenameController
-import ru.astrainteractive.kapitalystic.features.controllers.SetDescriptionController
-import ru.astrainteractive.kapitalystic.features.controllers.SetStatusController
-import ru.astrainteractive.kapitalystic.features.controllers.SetWarpController
-import ru.astrainteractive.kapitalystic.features.controllers.TransferController
-import ru.astrainteractive.kapitalystic.features.controllers.di.ClanManagementControllerModule
+import ru.astrainteractive.kapitalystik.features.controllers.AcceptInviteController
+import ru.astrainteractive.kapitalystik.features.controllers.CreateClanController
+import ru.astrainteractive.kapitalystik.features.controllers.DisbandController
+import ru.astrainteractive.kapitalystik.features.controllers.GetPagedOrgsController
+import ru.astrainteractive.kapitalystik.features.controllers.InviteController
+import ru.astrainteractive.kapitalystik.features.controllers.KickController
+import ru.astrainteractive.kapitalystik.features.controllers.MakeWarpPublicController
+import ru.astrainteractive.kapitalystik.features.controllers.RenameController
+import ru.astrainteractive.kapitalystik.features.controllers.SetDescriptionController
+import ru.astrainteractive.kapitalystik.features.controllers.SetStatusController
+import ru.astrainteractive.kapitalystik.features.controllers.SetWarpController
+import ru.astrainteractive.kapitalystik.features.controllers.TransferController
+import ru.astrainteractive.kapitalystik.features.controllers.di.ClanManagementControllerModule
 import ru.astrainteractive.klibs.kdi.Factory
 
 class ClanManagementControllers(module: ClanManagementControllerModule) {

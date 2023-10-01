@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.event.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
-import ru.astrainteractive.kapitalystic.exposed.api.factories.DatabaseFactory
+import ru.astrainteractive.kapitalystik.exposed.api.factories.DatabaseFactory
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 
 /**

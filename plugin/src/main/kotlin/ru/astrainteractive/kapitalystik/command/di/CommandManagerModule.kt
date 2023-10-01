@@ -1,8 +1,8 @@
 package ru.astrainteractive.kapitalystik.command.di
 
 import ru.astrainteractive.astralibs.async.AsyncComponent
-import ru.astrainteractive.kapitalystic.features.core.Translation
-import ru.astrainteractive.kapitalystic.features.failuremessenger.FailureMessenger
+import ru.astrainteractive.kapitalystik.features.core.Translation
+import ru.astrainteractive.kapitalystik.features.failuremessenger.FailureMessenger
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.di.impl.ClanManagementControllers
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers

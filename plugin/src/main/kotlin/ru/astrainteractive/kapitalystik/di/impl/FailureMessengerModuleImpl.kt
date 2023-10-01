@@ -1,7 +1,7 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
-import ru.astrainteractive.kapitalystic.features.core.Translation
-import ru.astrainteractive.kapitalystic.features.failuremessenger.di.FailureMessengerModule
+import ru.astrainteractive.kapitalystik.features.core.Translation
+import ru.astrainteractive.kapitalystik.features.failuremessenger.di.FailureMessengerModule
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 import ru.astrainteractive.klibs.kdi.getValue
 

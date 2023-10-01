@@ -1,7 +1,7 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.kapitalystic.features.balancevalidation.di.BalanceValidationModule
+import ru.astrainteractive.kapitalystik.features.balancevalidation.di.BalanceValidationModule
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue

@@ -5,11 +5,11 @@ import ru.astrainteractive.astralibs.configloader.ConfigLoader
 import ru.astrainteractive.astralibs.economy.AnyEconomyProvider
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.kapitalystic.exposed.api.factories.DatabaseFactory
-import ru.astrainteractive.kapitalystic.exposed.api.factories.KapitalystiKCommonDBApiFactory
-import ru.astrainteractive.kapitalystic.exposed.api.factories.KapitalystiKDBApiFactory
-import ru.astrainteractive.kapitalystic.features.core.Configuration
-import ru.astrainteractive.kapitalystic.features.platformmessenger.PlatformMessenger
+import ru.astrainteractive.kapitalystik.exposed.api.factories.DatabaseFactory
+import ru.astrainteractive.kapitalystik.exposed.api.factories.KapitalystiKCommonDBApiFactory
+import ru.astrainteractive.kapitalystik.exposed.api.factories.KapitalystiKDBApiFactory
+import ru.astrainteractive.kapitalystik.features.core.Configuration
+import ru.astrainteractive.kapitalystik.features.platformmessenger.PlatformMessenger
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.command.CommandManager
 import ru.astrainteractive.kapitalystik.di.impl.CommandManagerModuleImpl

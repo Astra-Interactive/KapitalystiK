@@ -3,7 +3,7 @@ package ru.astrainteractive.kapitalystik.command.kpt.command
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.command.Command
-import ru.astrainteractive.kapitalystic.dto.LocationDTO
+import ru.astrainteractive.kapitalystik.dto.LocationDTO
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.command.kpt.command.api.KptCommand
 import ru.astrainteractive.kapitalystik.command.kpt.util.toUserDTO

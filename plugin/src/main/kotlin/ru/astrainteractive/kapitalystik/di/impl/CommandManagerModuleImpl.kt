@@ -1,9 +1,9 @@
 package ru.astrainteractive.kapitalystik.di.impl
 
 import ru.astrainteractive.astralibs.async.AsyncComponent
-import ru.astrainteractive.kapitalystic.features.core.Translation
-import ru.astrainteractive.kapitalystic.features.failuremessenger.FailureMessenger
-import ru.astrainteractive.kapitalystic.features.failuremessenger.FailureMessenger.Companion.FailureMessenger
+import ru.astrainteractive.kapitalystik.features.core.Translation
+import ru.astrainteractive.kapitalystik.features.failuremessenger.FailureMessenger
+import ru.astrainteractive.kapitalystik.features.failuremessenger.FailureMessenger.Companion.FailureMessenger
 import ru.astrainteractive.kapitalystik.KapitalystiK
 import ru.astrainteractive.kapitalystik.command.di.CommandManagerModule
 import ru.astrainteractive.kapitalystik.di.SpigotRootModule
